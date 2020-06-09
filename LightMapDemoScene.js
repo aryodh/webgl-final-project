@@ -292,12 +292,18 @@ LightMapDemoScene.prototype.Load = function (cb) {
       //
       // Logical Values
       //
-      me.camera = new Camera(
-        vec3.fromValues(0, 0, 1.85),
-        vec3.fromValues(-0.3, -1, 1.85),
-        vec3.fromValues(0, 0, 1)
-      );
+      // me.camera = new Camera(
+      //   vec3.fromValues(-1, 1, 0),
+      //   vec3.fromValues(0, 1, 0),
+      //   vec3.fromValues(-0.8, 0.9, 0)
+      // );
 
+      me.camera = new Camera(
+        vec3.fromValues(-5, 1, -1), //posisi kamera, var pertama itu garis kursi sama papan tulis, var kedua garis vertikal atas bawah nya kursi, var ketiga horizontalnya kursi, tapi POV nya beda tergantung subs sama parameter kedua
+        vec3.fromValues(0, 1, -1), // POVnya; kalau mau geser kiri kanan biar pas, var ketiga ini harus sama kaya var ketiga yg posisi kamera biar pov nya ga miring
+        vec3.fromValues(0, 1, 0) //kemiringan kameranya aja
+      );
+      
       me.projMatrix = mat4.create();
       me.viewMatrix = mat4.create();
 
