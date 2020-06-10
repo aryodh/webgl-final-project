@@ -16,7 +16,7 @@ LightMapDemoScene.prototype.Load = function (cb) {
       Models: function (callback) {
         async.map(
           {
-            RoomModel: "RoomX.json",
+            RoomModel: "RoomY.json",
           },
           LoadJSONResource,
           callback
@@ -505,9 +505,9 @@ LightMapDemoScene.prototype.Load = function (cb) {
       //   );
 
       me.camera = new Camera(
-        vec3.fromValues(0, 0, 1.85),
-        vec3.fromValues(-0.3, -1, 1.85),
-        vec3.fromValues(0, 0, -1)
+        vec3.fromValues(-5, 1, -1),
+        vec3.fromValues(0, 1, 1),
+        vec3.fromValues(0, 1, 0)
       );
 
       me.projMatrix = mat4.create();
@@ -690,16 +690,381 @@ LightMapDemoScene.prototype.End = function () {
     cancelAnimationFrame(this.nextFrameHandle);
   }
 };
-
 //
 // Private Methods
 //
+
+LightMapDemoScene.prototype.initNodes = function (
+  meshname,
+  theta,
+  vector = null
+) {
+  // var m = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
+  var resetvector = vec3.fromValues(0, 0, 0);
+  var transformChild = false;
+
+  switch (meshname) {
+    case "WalleTorsoMesh":
+      vector = vec3.fromValues(1.2409, 0.561914, 2.8015);
+      vec3.scale(resetvector, vector, -1);
+      // mat4.rotate(m, m, theta);
+      mat4.translate(
+        this.WalleTorsoMesh.world,
+        this.WalleTorsoMesh.world,
+        vector
+      );
+      mat4.rotateY(
+        this.WalleTorsoMesh.world,
+        this.WalleTorsoMesh.world,
+        theta * (Math.PI / 180)
+      );
+
+      //reset translate ke titik awal
+      mat4.translate(
+        this.WalleTorsoMesh.world,
+        this.WalleTorsoMesh.world,
+        resetvector
+      );
+
+      //child
+      this.initNodes("WalleLeftUpperArmMesh", theta, vector);
+      // this.initNodes("WalleLeftLowerArmMesh", theta, vector);
+      this.initNodes("WalleRightUpperArmMesh", theta, vector);
+      // this.initNodes("WalleRightLowerArmMesh", theta, vector);
+      this.initNodes("WalleHeadMesh", theta, vector);
+      this.initNodes("WalleLeftLegMesh", theta, vector);
+      this.initNodes("WalleRightLegMesh", theta, vector);
+
+      break;
+
+    case "WalleLeftUpperArmMesh":
+      if (vector === null) {
+        vector = vec3.fromValues(0.951443, 0.822344, 3.05589);
+      }
+      vec3.scale(resetvector, vector, -1);
+      // mat4.rotate(m, m, theta);
+      mat4.translate(
+        this.WalleLeftUpperArmMesh.world,
+        this.WalleLeftUpperArmMesh.world,
+        vector
+      );
+      mat4.rotateY(
+        this.WalleLeftUpperArmMesh.world,
+        this.WalleLeftUpperArmMesh.world,
+        theta * (Math.PI / 180)
+      );
+      //child
+      this.initNodes("WalleLeftLowerArmMesh", theta, vector);
+      //reset translate ke titik awal
+      mat4.translate(
+        this.WalleLeftUpperArmMesh.world,
+        this.WalleLeftUpperArmMesh.world,
+        resetvector
+      );
+
+      break;
+
+    case "WalleLeftLowerArmMesh":
+      if (vector === null) {
+        vector = vec3.fromValues(0.450769, 1.08849, 3.01258);
+      }
+      vec3.scale(resetvector, vector, -1);
+      // mat4.rotate(m, m, theta);
+      mat4.translate(
+        this.WalleLeftLowerArmMesh.world,
+        this.WalleLeftLowerArmMesh.world,
+        vector
+      );
+      mat4.rotateY(
+        this.WalleLeftLowerArmMesh.world,
+        this.WalleLeftLowerArmMesh.world,
+        theta * (Math.PI / 180)
+      );
+
+      //reset translate ke titik awal
+      mat4.translate(
+        this.WalleLeftLowerArmMesh.world,
+        this.WalleLeftLowerArmMesh.world,
+        resetvector
+      );
+      break;
+
+    case "WalleRightUpperArmMesh":
+      if (vector === null) {
+        vector = vec3.fromValues(1.49657, 0.840917, 2.53671);
+      }
+      vec3.scale(resetvector, vector, -1);
+      // mat4.rotate(m, m, theta);
+      mat4.translate(
+        this.WalleRightUpperArmMesh.world,
+        this.WalleRightUpperArmMesh.world,
+        vector
+      );
+      mat4.rotateY(
+        this.WalleRightUpperArmMesh.world,
+        this.WalleRightUpperArmMesh.world,
+        theta * (Math.PI / 180)
+      );
+
+      //child
+      this.initNodes("WalleRightLowerArmMesh", theta, vector);
+      //reset translate ke titik awal
+      mat4.translate(
+        this.WalleRightUpperArmMesh.world,
+        this.WalleRightUpperArmMesh.world,
+        resetvector
+      );
+
+      break;
+
+    case "WalleRightLowerArmMesh":
+      if (vector === null) {
+        vector = vec3.fromValues(1.55465, 0.751237, 1.97304);
+      }
+      vec3.scale(resetvector, vector, -1);
+      // mat4.rotate(m, m, theta);
+      mat4.translate(
+        this.WalleRightLowerArmMesh.world,
+        this.WalleRightLowerArmMesh.world,
+        vector
+      );
+      mat4.rotateY(
+        this.WalleRightLowerArmMesh.world,
+        this.WalleRightLowerArmMesh.world,
+        theta * (Math.PI / 180)
+      );
+
+      //reset translate ke titik awal
+      mat4.translate(
+        this.WalleRightLowerArmMesh.world,
+        this.WalleRightLowerArmMesh.world,
+        resetvector
+      );
+      break;
+    case "WalleHeadMesh":
+      if (vector === null) {
+        vector = vec3.fromValues(1.2409, 0.957854, 2.8015);
+      }
+      vec3.scale(resetvector, vector, -1);
+      // mat4.rotate(m, m, theta);
+      mat4.translate(
+        this.WalleHeadMesh.world,
+        this.WalleHeadMesh.world,
+        vector
+      );
+      mat4.rotateY(
+        this.WalleHeadMesh.world,
+        this.WalleHeadMesh.world,
+        theta * (Math.PI / 180)
+      );
+
+      //reset translate ke titik awal
+      mat4.translate(
+        this.WalleHeadMesh.world,
+        this.WalleHeadMesh.world,
+        resetvector
+      );
+      break;
+    case "WalleLeftLegMesh":
+      if (vector === null) {
+        vector = vec3.fromValues(1.2409, 0.957854, 2.8015);
+      }
+      vec3.scale(resetvector, vector, -1);
+      // mat4.rotate(m, m, theta);
+      mat4.translate(
+        this.WalleLeftLegMesh.world,
+        this.WalleLeftLegMesh.world,
+        vector
+      );
+      mat4.rotateY(
+        this.WalleLeftLegMesh.world,
+        this.WalleLeftLegMesh.world,
+        theta * (Math.PI / 180)
+      );
+
+      //reset translate ke titik awal
+      mat4.translate(
+        this.WalleLeftLegMesh.world,
+        this.WalleLeftLegMesh.world,
+        resetvector
+      );
+      break;
+    case "WalleRightLegMesh":
+      if (vector === null) {
+        vector = vec3.fromValues(1.2409, 0.957854, 2.8015);
+      }
+      vec3.scale(resetvector, vector, -1);
+      // mat4.rotate(m, m, theta);
+      mat4.translate(
+        this.WalleRightLegMesh.world,
+        this.WalleRightLegMesh.world,
+        vector
+      );
+      mat4.rotateY(
+        this.WalleRightLegMesh.world,
+        this.WalleRightLegMesh.world,
+        theta * (Math.PI / 180)
+      );
+
+      //reset translate ke titik awal
+      mat4.translate(
+        this.WalleRightLegMesh.world,
+        this.WalleRightLegMesh.world,
+        resetvector
+      );
+      break;
+
+    case "BoxiTorsoMesh":
+      vector = vec3.fromValues(0.106997, 1.00995, -2.09286);
+      vec3.scale(resetvector, vector, -1);
+      // mat4.rotate(m, m, theta);
+      mat4.translate(
+        this.BoxiTorsoMesh.world,
+        this.BoxiTorsoMesh.world,
+        vector
+      );
+      mat4.rotateY(
+        this.BoxiTorsoMesh.world,
+        this.BoxiTorsoMesh.world,
+        theta * (Math.PI / 180)
+      );
+
+      //reset translate ke titik awal
+      mat4.translate(
+        this.BoxiTorsoMesh.world,
+        this.BoxiTorsoMesh.world,
+        resetvector
+      );
+
+      //child
+      this.initNodes("BoxiRightHandMesh", theta, vector);
+      this.initNodes("BoxiLeftHandMesh", theta, vector);
+
+      break;
+
+    case "BoxiRightHandMesh":
+      if (vector === null) {
+        vector = vec3.fromValues(0.110793, 1.06969, -2.67071);
+      }
+      vec3.scale(resetvector, vector, -1);
+      // mat4.rotate(m, m, theta);
+      mat4.translate(
+        this.BoxiRightHandMesh.world,
+        this.BoxiRightHandMesh.world,
+        vector
+      );
+      mat4.rotateY(
+        this.BoxiRightHandMesh.world,
+        this.BoxiRightHandMesh.world,
+        theta * (Math.PI / 180)
+      );
+
+      //reset translate ke titik awal
+      mat4.translate(
+        this.BoxiRightHandMesh.world,
+        this.BoxiRightHandMesh.world,
+        resetvector
+      );
+      break;
+
+    case "BoxiLeftHandMesh":
+      if (vector === null) {
+        vector = vec3.fromValues(0.110793, 1.07005, -1.50526);
+      }
+      vec3.scale(resetvector, vector, -1);
+      // mat4.rotate(m, m, theta);
+      mat4.translate(
+        this.BoxiLeftHandMesh.world,
+        this.BoxiLeftHandMesh.world,
+        vector
+      );
+      mat4.rotateY(
+        this.BoxiLeftHandMesh.world,
+        this.BoxiLeftHandMesh.world,
+        theta * (Math.PI / 180)
+      );
+
+      //reset translate ke titik awal
+      mat4.translate(
+        this.BoxiLeftHandMesh.world,
+        this.BoxiLeftHandMesh.world,
+        resetvector
+      );
+      break;
+  }
+};
+
 LightMapDemoScene.prototype._Update = function (dt) {
   //   mat4.rotateZ(
   //     this.MonkeyMesh.world,
   //     this.MonkeyMesh.world,
   //     (dt / 1000) * 2 * Math.PI * 0.3
   //   );
+  var me = this;
+
+  document.getElementById("walleTorso").onchange = function (event) {
+    document.getElementById("walleTorso").value = event.target.value;
+    me.initNodes("WalleTorsoMesh", event.target.value);
+  };
+  document.getElementById("walleRightUpperArm").onchange = function (event) {
+    document.getElementById("walleRightUpperArm").value = event.target.value;
+    me.initNodes("WalleRightUpperArmMesh", event.target.value, null);
+  };
+
+  document.getElementById("walleLeftUpperArm").onchange = function (event) {
+    document.getElementById("walleLeftUpperArm").value = event.target.value;
+    me.initNodes("WalleLeftUpperArmMesh", event.target.value, null);
+  };
+
+  document.getElementById("walleRightLowerArm").onchange = function (event) {
+    document.getElementById("walleRightLowerArm").value = event.target.value;
+    me.initNodes("WalleRightLowerArmMesh", event.target.value, null);
+  };
+
+  document.getElementById("walleLeftLowerArm").onchange = function (event) {
+    document.getElementById("walleLeftLowerArm").value = event.target.value;
+    me.initNodes("WalleLeftLowerArmMesh", event.target.value, null);
+  };
+
+  document.getElementById("walleHead").onchange = function (event) {
+    document.getElementById("walleHead").value = event.target.value;
+    me.initNodes("WalleHeadMesh", event.target.value, null);
+  };
+
+  document.getElementById("walleHead").onchange = function (event) {
+    document.getElementById("walleHead").value = event.target.value;
+    me.initNodes("WalleHeadMesh", event.target.value, null);
+  };
+
+  document.getElementById("boxiTorso").onchange = function (event) {
+    document.getElementById("boxiTorso").value = event.target.value;
+    me.initNodes("BoxiTorsoMesh", event.target.value, null);
+  };
+
+  document.getElementById("BoxiRightHand").onchange = function (event) {
+    document.getElementById("BoxiRightHand").value = event.target.value;
+    me.initNodes("BoxiRightHandMesh", event.target.value, null);
+  };
+
+  document.getElementById("BoxiLeftHand").onchange = function (event) {
+    document.getElementById("BoxiLeftHand").value = event.target.value;
+    me.initNodes("BoxiLeftHandMesh", event.target.value, null);
+  };
+
+  document.getElementById("pocongTorso").onchange = function (event) {
+    document.getElementById("pocongTorso").value = event.target.value;
+    me.initNodes("PocongTorsoMesh", event.target.value, null);
+  };
+
+  document.getElementById("pocongRightArm").onchange = function (event) {
+    document.getElementById("pocongRightArm").value = event.target.value;
+    me.initNodes("PocongRightArmMesh", event.target.value, null);
+  };
+
+  document.getElementById("pocongLeftArm").onchange = function (event) {
+    document.getElementById("pocongLeftArm").value = event.target.value;
+    me.initNodes("PocongLeftArmMesh", event.target.value, null);
+  };
 
   if (this.PressedKeys.Forward && !this.PressedKeys.Back) {
     this.camera.moveForward((dt / 1000) * this.MoveForwardSpeed);

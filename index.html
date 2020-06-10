@@ -2,13 +2,6 @@
 <html>
   <head>
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        position: absolute;
-      }
-    </style>
-    <style>
       .slidecontainer {
         width: 100%;
       }
@@ -19,10 +12,86 @@
     <canvas id="gl-surface">
       Get a <a href="http://chrome.google.com">less stupid</a> browser
     </canvas>
-    <div class="slidecontainer">
-      <p>Default range slider:</p>
-      <input type="range" min="1" max="100" value="50" id="walleTorso" />
+    <div style="display: flex;">
+      <div style="width: 40%;">
+        <div>
+          <p>Boxi Torso</p>
+          <input type="range" min="1" max="360" value="1" id="boxiTorso" />
+        </div>
+        <div>
+          <p>Boxi Right Arm</p>
+          <input type="range" min="1" max="360" value="1" id="BoxiRightHand" />
+        </div>
+        <div>
+          <p>Boxi Left Arm</p>
+          <input type="range" min="1" max="360" value="1" id="BoxiLeftHand" />
+        </div>
+        <div>
+          <p>Pocong Torso</p>
+          <input type="range" min="1" max="360" value="1" id="pocongTorso" />
+        </div>
+        <div>
+          <p>Pocong Right Arm</p>
+          <input type="range" min="1" max="360" value="1" id="pocongRightArm" />
+        </div>
+        <div>
+          <p>Pocong Left Arm</p>
+          <input type="range" min="1" max="360" value="1" id="pocongLeftArm" />
+        </div>
+      </div>
+
+      <div style="width: 40%;">
+        <div>
+          <p>walle Torso</p>
+          <input type="range" min="1" max="360" value="1" id="walleTorso" />
+        </div>
+        <div>
+          <p>walle Right Upper Arm</p>
+          <input
+            type="range"
+            min="1"
+            max="360"
+            value="1"
+            id="walleRightUpperArm"
+          />
+        </div>
+        <div>
+          <p>walle Left Upper Arm</p>
+          <input
+            type="range"
+            min="1"
+            max="360"
+            value="1"
+            id="walleLeftUpperArm"
+          />
+        </div>
+        <div>
+          <p>walle Right Lower Arm</p>
+          <input
+            type="range"
+            min="1"
+            max="360"
+            value="1"
+            id="walleRightLowerArm"
+          />
+        </div>
+        <div>
+          <p>walle Left Lower Arm</p>
+          <input
+            type="range"
+            min="1"
+            max="360"
+            value="1"
+            id="walleLeftLowerArm"
+          />
+        </div>
+        <div>
+          <p>walle Head</p>
+          <input type="range" min="1" max="360" value="1" id="walleHead" />
+        </div>
+      </div>
     </div>
+
     <script src="bower_components/async/dist/async.min.js"></script>
     <script src="bower_components/gl-matrix/dist/gl-matrix-min.js"></script>
 
