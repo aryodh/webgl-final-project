@@ -16,8 +16,7 @@ LightMapDemoScene.prototype.Load = function (cb) {
       Models: function (callback) {
         async.map(
           {
-            RoomModel: "Room2.json",
-            WalleModel: "Walle2.json",
+            RoomModel: "RoomX.json",
           },
           LoadJSONResource,
           callback
@@ -47,226 +46,184 @@ LightMapDemoScene.prototype.Load = function (cb) {
       //
       // Create Model objects
       //
+      console.log(loadResults.Models.RoomModel.meshes.length);
+      for (var i = 0; i < loadResults.Models.RoomModel.meshes.length; i++) {
+        var mesh = loadResults.Models.RoomModel.meshes[i];
+        switch (mesh.name) {
+          case "ChairMesh":
+            me.ChairMesh = new Model(
+              me.gl,
+              mesh.vertices,
+              [].concat.apply([], mesh.faces),
+              mesh.normals,
+              vec4.fromValues(0, 1, 1, 1)
+            );
+            mat4.translate(
+              me.ChairMesh.world,
+              me.ChairMesh.world,
+              vec3.fromValues(-0.939364, -0.248872, 0.266437)
+            );
 
-      var totalMesh =
-        loadResults.Models.RoomModel.meshes.length +
-        loadResults.Models.WalleModel.meshes.length;
-      for (var i = 0; i < totalMesh; i++) {
-        if (i < loadResults.Models.RoomModel.meshes.length) {
-          var mesh = loadResults.Models.RoomModel.meshes[i];
-          switch (mesh.name) {
-            case "ChairMesh":
-              me.ChairMesh = new Model(
-                me.gl,
-                mesh.vertices,
-                [].concat.apply([], mesh.faces),
-                mesh.normals,
-                vec4.fromValues(0, 1, 1, 1)
-              );
-              mat4.translate(
-                me.ChairMesh.world,
-                me.ChairMesh.world,
-                vec3.fromValues(-0.939364, -0.248872, 0.266437)
-              );
-
-              break;
-            case "ChalkboardMesh":
-              me.ChalkboardMesh = new Model(
-                me.gl,
-                mesh.vertices,
-                [].concat.apply([], mesh.faces),
-                mesh.normals,
-                vec4.fromValues(0, 1, 1, 1)
-              );
-              break;
-            case "LightBulbMesh":
-              me.lightPosition = vec3.fromValues(0, 0.0, 2.58971);
-              me.LightBulbMesh = new Model(
-                me.gl,
-                mesh.vertices,
-                [].concat.apply([], mesh.faces),
-                mesh.normals,
-                vec4.fromValues(4, 4, 4, 1)
-              );
-              mat4.translate(
-                me.LightBulbMesh.world,
-                me.LightBulbMesh.world,
-                me.lightPosition
-              );
-              break;
-            case "RoomMesh":
-              me.RoomMesh = new Model(
-                me.gl,
-                mesh.vertices,
-                [].concat.apply([], mesh.faces),
-                mesh.normals,
-                vec4.fromValues(0.3, 0.3, 0.3, 1)
-              );
-              break;
-          }
-        } else {
-          var mesh =
-            loadResults.Models.WalleModel.meshes[
-              i - loadResults.Models.RoomModel.meshes.length
-            ];
-          var walleXpos = 1;
-          var walleYpos = 1.5;
-          var walleZpos = 2;
-          switch (mesh.name) {
-            case "WalleLeftLegMesh":
-              me.WalleLeftLegMesh = new Model(
-                me.gl,
-                mesh.vertices,
-                [].concat.apply([], mesh.faces),
-                mesh.normals,
-                vec4.fromValues(0, 1, 1, 1)
-              );
-              mat4.scale(
-                me.WalleLeftLegMesh.world,
-                me.WalleLeftLegMesh.world,
-                vec3.fromValues(0.392022, 0.392022, 0.392022)
-              );
-              mat4.translate(
-                me.WalleLeftLegMesh.world,
-                me.WalleLeftLegMesh.world,
-                vec3.fromValues(walleXpos, walleYpos, walleZpos)
-              );
-
-              break;
-            case "WalleRightLegMesh":
-              me.WalleRightLegMesh = new Model(
-                me.gl,
-                mesh.vertices,
-                [].concat.apply([], mesh.faces),
-                mesh.normals,
-                vec4.fromValues(0, 1, 1, 1)
-              );
-              mat4.scale(
-                me.WalleRightLegMesh.world,
-                me.WalleRightLegMesh.world,
-                vec3.fromValues(0.392022, 0.392022, 0.392022)
-              );
-              mat4.translate(
-                me.WalleRightLegMesh.world,
-                me.WalleRightLegMesh.world,
-                vec3.fromValues(walleXpos, walleYpos, walleZpos)
-              );
-              break;
-            case "WalleRightUpperArmMesh":
-              me.WalleRightUpperArmMesh = new Model(
-                me.gl,
-                mesh.vertices,
-                [].concat.apply([], mesh.faces),
-                mesh.normals,
-                vec4.fromValues(0, 1, 1, 1)
-              );
-              mat4.scale(
-                me.WalleRightUpperArmMesh.world,
-                me.WalleRightUpperArmMesh.world,
-                vec3.fromValues(0.392022, 0.392022, 0.392022)
-              );
-              mat4.translate(
-                me.WalleRightUpperArmMesh.world,
-                me.WalleRightUpperArmMesh.world,
-                vec3.fromValues(walleXpos, walleYpos, walleZpos)
-              );
-              break;
-            case "WalleRightLowerArmMesh":
-              me.WalleRightLowerArmMesh = new Model(
-                me.gl,
-                mesh.vertices,
-                [].concat.apply([], mesh.faces),
-                mesh.normals,
-                vec4.fromValues(0, 1, 1, 1)
-              );
-              mat4.scale(
-                me.WalleRightLowerArmMesh.world,
-                me.WalleRightLowerArmMesh.world,
-                vec3.fromValues(0.392022, 0.392022, 0.392022)
-              );
-              mat4.translate(
-                me.WalleRightLowerArmMesh.world,
-                me.WalleRightLowerArmMesh.world,
-                vec3.fromValues(walleXpos, walleYpos, walleZpos)
-              );
-              break;
-            case "WalleLeftLowerArmMesh":
-              me.WalleLeftLowerArmMesh = new Model(
-                me.gl,
-                mesh.vertices,
-                [].concat.apply([], mesh.faces),
-                mesh.normals,
-                vec4.fromValues(0, 1, 1, 1)
-              );
-              mat4.scale(
-                me.WalleLeftLowerArmMesh.world,
-                me.WalleLeftLowerArmMesh.world,
-                vec3.fromValues(0.392022, 0.392022, 0.392022)
-              );
-              mat4.translate(
-                me.WalleLeftLowerArmMesh.world,
-                me.WalleLeftLowerArmMesh.world,
-                vec3.fromValues(walleXpos, walleYpos, walleZpos)
-              );
-              break;
-            case "WalleLeftUpperArmMesh":
-              me.WalleLeftUpperArmMesh = new Model(
-                me.gl,
-                mesh.vertices,
-                [].concat.apply([], mesh.faces),
-                mesh.normals,
-                vec4.fromValues(0, 1, 1, 1)
-              );
-              mat4.scale(
-                me.WalleLeftUpperArmMesh.world,
-                me.WalleLeftUpperArmMesh.world,
-                vec3.fromValues(0.392022, 0.392022, 0.392022)
-              );
-              mat4.translate(
-                me.WalleLeftUpperArmMesh.world,
-                me.WalleLeftUpperArmMesh.world,
-                vec3.fromValues(walleXpos, walleYpos, walleZpos)
-              );
-              break;
-            case "WalleHeadMesh":
-              me.WalleHeadMesh = new Model(
-                me.gl,
-                mesh.vertices,
-                [].concat.apply([], mesh.faces),
-                mesh.normals,
-                vec4.fromValues(0, 1, 1, 1)
-              );
-              mat4.scale(
-                me.WalleHeadMesh.world,
-                me.WalleHeadMesh.world,
-                vec3.fromValues(0.392022, 0.392022, 0.392022)
-              );
-              mat4.translate(
-                me.WalleHeadMesh.world,
-                me.WalleHeadMesh.world,
-                vec3.fromValues(walleXpos, walleYpos, walleZpos)
-              );
-              break;
-            case "WalleTorsoMesh":
-              me.WalleTorsoMesh = new Model(
-                me.gl,
-                mesh.vertices,
-                [].concat.apply([], mesh.faces),
-                mesh.normals,
-                vec4.fromValues(0, 1, 1, 1)
-              );
-              mat4.scale(
-                me.WalleTorsoMesh.world,
-                me.WalleTorsoMesh.world,
-                vec3.fromValues(0.392022, 0.392022, 0.392022)
-              );
-              mat4.translate(
-                me.WalleTorsoMesh.world,
-                me.WalleTorsoMesh.world,
-                vec3.fromValues(walleXpos, walleYpos, walleZpos)
-              );
-              break;
-          }
+            break;
+          case "ChalkboardMesh":
+            me.ChalkboardMesh = new Model(
+              me.gl,
+              mesh.vertices,
+              [].concat.apply([], mesh.faces),
+              mesh.normals,
+              vec4.fromValues(0, 1, 1, 1)
+            );
+            break;
+          case "LightBulbMesh":
+            me.lightPosition = vec3.fromValues(0, 0.0, 0);
+            me.LightBulbMesh = new Model(
+              me.gl,
+              mesh.vertices,
+              [].concat.apply([], mesh.faces),
+              mesh.normals,
+              vec4.fromValues(4, 4, 4, 1)
+            );
+            mat4.translate(
+              me.LightBulbMesh.world,
+              me.LightBulbMesh.world,
+              me.lightPosition
+            );
+            break;
+          case "RoomMesh":
+            me.RoomMesh = new Model(
+              me.gl,
+              mesh.vertices,
+              [].concat.apply([], mesh.faces),
+              mesh.normals,
+              vec4.fromValues(0.3, 0.3, 0.3, 1)
+            );
+            break;
+          case "WalleLeftLegMesh":
+            me.WalleLeftLegMesh = new Model(
+              me.gl,
+              mesh.vertices,
+              [].concat.apply([], mesh.faces),
+              mesh.normals,
+              vec4.fromValues(0, 1, 1, 1)
+            );
+            break;
+          case "WalleRightLegMesh":
+            me.WalleRightLegMesh = new Model(
+              me.gl,
+              mesh.vertices,
+              [].concat.apply([], mesh.faces),
+              mesh.normals,
+              vec4.fromValues(0, 1, 1, 1)
+            );
+            break;
+          case "WalleRightUpperArmMesh":
+            me.WalleRightUpperArmMesh = new Model(
+              me.gl,
+              mesh.vertices,
+              [].concat.apply([], mesh.faces),
+              mesh.normals,
+              vec4.fromValues(0, 1, 1, 1)
+            );
+            break;
+          case "WalleRightLowerArmMesh":
+            me.WalleRightLowerArmMesh = new Model(
+              me.gl,
+              mesh.vertices,
+              [].concat.apply([], mesh.faces),
+              mesh.normals,
+              vec4.fromValues(0, 1, 1, 1)
+            );
+            break;
+          case "WalleLeftLowerArmMesh":
+            me.WalleLeftLowerArmMesh = new Model(
+              me.gl,
+              mesh.vertices,
+              [].concat.apply([], mesh.faces),
+              mesh.normals,
+              vec4.fromValues(0, 1, 1, 1)
+            );
+            break;
+          case "WalleLeftUpperArmMesh":
+            me.WalleLeftUpperArmMesh = new Model(
+              me.gl,
+              mesh.vertices,
+              [].concat.apply([], mesh.faces),
+              mesh.normals,
+              vec4.fromValues(0, 1, 1, 1)
+            );
+            break;
+          case "WalleHeadMesh":
+            me.WalleHeadMesh = new Model(
+              me.gl,
+              mesh.vertices,
+              [].concat.apply([], mesh.faces),
+              mesh.normals,
+              vec4.fromValues(0, 1, 1, 1)
+            );
+            break;
+          case "WalleTorsoMesh":
+            me.WalleTorsoMesh = new Model(
+              me.gl,
+              mesh.vertices,
+              [].concat.apply([], mesh.faces),
+              mesh.normals,
+              vec4.fromValues(0, 1, 1, 1)
+            );
+            break;
+          case "BoxiTorsoMesh":
+            me.BoxiTorsoMesh = new Model(
+              me.gl,
+              mesh.vertices,
+              [].concat.apply([], mesh.faces),
+              mesh.normals,
+              vec4.fromValues(0, 1, 1, 1)
+            );
+            break;
+          case "BoxiLeftHandMesh":
+            me.BoxiLeftHandMesh = new Model(
+              me.gl,
+              mesh.vertices,
+              [].concat.apply([], mesh.faces),
+              mesh.normals,
+              vec4.fromValues(0, 1, 1, 1)
+            );
+            break;
+          case "BoxiRightHandMesh":
+            me.BoxiRightHandMesh = new Model(
+              me.gl,
+              mesh.vertices,
+              [].concat.apply([], mesh.faces),
+              mesh.normals,
+              vec4.fromValues(0, 1, 1, 1)
+            );
+            break;
+          case "PocongTorsoMesh":
+            me.PocongTorsoMesh = new Model(
+              me.gl,
+              mesh.vertices,
+              [].concat.apply([], mesh.faces),
+              mesh.normals,
+              vec4.fromValues(0, 1, 1, 1)
+            );
+            break;
+          case "PocongRightHandMesh":
+            me.PocongRightHandMesh = new Model(
+              me.gl,
+              mesh.vertices,
+              [].concat.apply([], mesh.faces),
+              mesh.normals,
+              vec4.fromValues(0, 1, 1, 1)
+            );
+            break;
+          case "PocongLeftHandMesh":
+            me.PocongLeftHandMesh = new Model(
+              me.gl,
+              mesh.vertices,
+              [].concat.apply([], mesh.faces),
+              mesh.normals,
+              vec4.fromValues(0, 1, 1, 1)
+            );
+            break;
         }
       }
 
@@ -286,6 +243,62 @@ LightMapDemoScene.prototype.Load = function (cb) {
         cb("Failed to load room mesh");
         return;
       }
+      if (!me.WalleLeftLegMesh) {
+        cb("Failed to load walle left leg mesh");
+        return;
+      }
+      if (!me.WalleRightLegMesh) {
+        cb("Failed to load wrl mesh");
+        return;
+      }
+      if (!me.WalleRightUpperArmMesh) {
+        cb("Failed to load wrua mesh");
+        return;
+      }
+      if (!me.WalleRightLowerArmMesh) {
+        cb("Failed to load wrla mesh");
+        return;
+      }
+      if (!me.WalleLeftLowerArmMesh) {
+        cb("Failed to load wlla mesh");
+        return;
+      }
+      if (!me.WalleLeftUpperArmMesh) {
+        cb("Failed to load wlua mesh");
+        return;
+      }
+      if (!me.WalleHeadMesh) {
+        cb("Failed to load whead mesh");
+        return;
+      }
+      if (!me.WalleTorsoMesh) {
+        cb("Failed to load wtorso mesh");
+        return;
+      }
+      if (!me.BoxiTorsoMesh) {
+        cb("Failed to load btorso mesh");
+        return;
+      }
+      if (!me.BoxiRightHandMesh) {
+        cb("Failed to load brh mesh");
+        return;
+      }
+      if (!me.BoxiLeftHandMesh) {
+        cb("Failed to load blh mesh");
+        return;
+      }
+      if (!me.PocongTorsoMesh) {
+        cb("Failed to load ptorso mesh");
+        return;
+      }
+      if (!me.PocongRightHandMesh) {
+        cb("Failed to load prh mesh");
+        return;
+      }
+      if (!me.PocongLeftHandMesh) {
+        cb("Failed to load plh mesh");
+        return;
+      }
       me.Meshes = [
         me.ChairMesh,
         me.ChalkboardMesh,
@@ -300,6 +313,14 @@ LightMapDemoScene.prototype.Load = function (cb) {
         me.WalleLeftUpperArmMesh,
         me.WalleHeadMesh,
         me.WalleTorsoMesh,
+
+        me.BoxiTorsoMesh,
+        me.BoxiRightHandMesh,
+        me.BoxiLeftHandMesh,
+
+        me.PocongTorsoMesh,
+        me.PocongRightHandMesh,
+        me.PocongLeftHandMesh,
       ];
 
       //
@@ -477,10 +498,16 @@ LightMapDemoScene.prototype.Load = function (cb) {
       //   vec3.fromValues(-0.8, 0.9, 0)
       // );
 
+      //   me.camera = new Camera(
+      //     vec3.fromValues(-5, 1, -1), //posisi kamera, var pertama itu garis kursi sama papan tulis, var kedua garis vertikal atas bawah nya kursi, var ketiga horizontalnya kursi, tapi POV nya beda tergantung subs sama parameter kedua
+      //     vec3.fromValues(0, 1, -1), // POVnya; kalau mau geser kiri kanan biar pas, var ketiga ini harus sama kaya var ketiga yg posisi kamera biar pov nya ga miring
+      //     vec3.fromValues(0, 0, 1) //kemiringan kameranya aja
+      //   );
+
       me.camera = new Camera(
-        vec3.fromValues(-5, 1, -1), //posisi kamera, var pertama itu garis kursi sama papan tulis, var kedua garis vertikal atas bawah nya kursi, var ketiga horizontalnya kursi, tapi POV nya beda tergantung subs sama parameter kedua
-        vec3.fromValues(0, 1, -1), // POVnya; kalau mau geser kiri kanan biar pas, var ketiga ini harus sama kaya var ketiga yg posisi kamera biar pov nya ga miring
-        vec3.fromValues(0, 1, 0) //kemiringan kameranya aja
+        vec3.fromValues(0, 0, 1.85),
+        vec3.fromValues(-0.3, -1, 1.85),
+        vec3.fromValues(0, 0, -1)
       );
 
       me.projMatrix = mat4.create();
@@ -587,6 +614,14 @@ LightMapDemoScene.prototype.Unload = function () {
   this.WalleLeftUpperArmMesh = null;
   this.WalleHeadMesh = null;
   this.WalleTorsoMesh = null;
+
+  this.BoxiTorsoMesh = null;
+  this.BoxiRightHandMesh = null;
+  this.BoxiLeftHandMesh = null;
+
+  this.PocongTorsoMesh = null;
+  this.PocongRightHandMesh = null;
+  this.PocongLeftHandMesh = null;
 
   this.NoShadowProgram = null;
   this.ShadowProgram = null;
