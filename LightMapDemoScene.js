@@ -17,6 +17,7 @@ LightMapDemoScene.prototype.Load = function (cb) {
         async.map(
           {
             RoomModel: "Room2.json",
+            WalleModel: "Walle2.json",
           },
           LoadJSONResource,
           callback
@@ -46,57 +47,226 @@ LightMapDemoScene.prototype.Load = function (cb) {
       //
       // Create Model objects
       //
-      for (var i = 0; i < loadResults.Models.RoomModel.meshes.length; i++) {
-        var mesh = loadResults.Models.RoomModel.meshes[i];
-        switch (mesh.name) {
-          case "ChairMesh":
-            me.ChairMesh = new Model(
-              me.gl,
-              mesh.vertices,
-              [].concat.apply([], mesh.faces),
-              mesh.normals,
-              vec4.fromValues(0, 1, 1, 1)
-            );
-            mat4.translate(
-              me.ChairMesh.world,
-              me.ChairMesh.world,
-              vec3.fromValues(-0.939364, -0.248872, 0.266437)
-            );
 
-            break;
-          case "ChalkboardMesh":
-            me.ChalkboardMesh = new Model(
-              me.gl,
-              mesh.vertices,
-              [].concat.apply([], mesh.faces),
-              mesh.normals,
-              vec4.fromValues(0, 1, 1, 1)
-            );
-            break;
-          case "LightBulbMesh":
-            me.lightPosition = vec3.fromValues(0, 0.0, 2.58971);
-            me.LightBulbMesh = new Model(
-              me.gl,
-              mesh.vertices,
-              [].concat.apply([], mesh.faces),
-              mesh.normals,
-              vec4.fromValues(4, 4, 4, 1)
-            );
-            mat4.translate(
-              me.LightBulbMesh.world,
-              me.LightBulbMesh.world,
-              me.lightPosition
-            );
-            break;
-          case "RoomMesh":
-            me.RoomMesh = new Model(
-              me.gl,
-              mesh.vertices,
-              [].concat.apply([], mesh.faces),
-              mesh.normals,
-              vec4.fromValues(0.3, 0.3, 0.3, 1)
-            );
-            break;
+      var totalMesh =
+        loadResults.Models.RoomModel.meshes.length +
+        loadResults.Models.WalleModel.meshes.length;
+      for (var i = 0; i < totalMesh; i++) {
+        if (i < loadResults.Models.RoomModel.meshes.length) {
+          var mesh = loadResults.Models.RoomModel.meshes[i];
+          switch (mesh.name) {
+            case "ChairMesh":
+              me.ChairMesh = new Model(
+                me.gl,
+                mesh.vertices,
+                [].concat.apply([], mesh.faces),
+                mesh.normals,
+                vec4.fromValues(0, 1, 1, 1)
+              );
+              mat4.translate(
+                me.ChairMesh.world,
+                me.ChairMesh.world,
+                vec3.fromValues(-0.939364, -0.248872, 0.266437)
+              );
+
+              break;
+            case "ChalkboardMesh":
+              me.ChalkboardMesh = new Model(
+                me.gl,
+                mesh.vertices,
+                [].concat.apply([], mesh.faces),
+                mesh.normals,
+                vec4.fromValues(0, 1, 1, 1)
+              );
+              break;
+            case "LightBulbMesh":
+              me.lightPosition = vec3.fromValues(0, 0.0, 2.58971);
+              me.LightBulbMesh = new Model(
+                me.gl,
+                mesh.vertices,
+                [].concat.apply([], mesh.faces),
+                mesh.normals,
+                vec4.fromValues(4, 4, 4, 1)
+              );
+              mat4.translate(
+                me.LightBulbMesh.world,
+                me.LightBulbMesh.world,
+                me.lightPosition
+              );
+              break;
+            case "RoomMesh":
+              me.RoomMesh = new Model(
+                me.gl,
+                mesh.vertices,
+                [].concat.apply([], mesh.faces),
+                mesh.normals,
+                vec4.fromValues(0.3, 0.3, 0.3, 1)
+              );
+              break;
+          }
+        } else {
+          var mesh =
+            loadResults.Models.WalleModel.meshes[
+              i - loadResults.Models.RoomModel.meshes.length
+            ];
+          var walleXpos = 1;
+          var walleYpos = 1.5;
+          var walleZpos = 2;
+          switch (mesh.name) {
+            case "WalleLeftLegMesh":
+              me.WalleLeftLegMesh = new Model(
+                me.gl,
+                mesh.vertices,
+                [].concat.apply([], mesh.faces),
+                mesh.normals,
+                vec4.fromValues(0, 1, 1, 1)
+              );
+              mat4.scale(
+                me.WalleLeftLegMesh.world,
+                me.WalleLeftLegMesh.world,
+                vec3.fromValues(0.392022, 0.392022, 0.392022)
+              );
+              mat4.translate(
+                me.WalleLeftLegMesh.world,
+                me.WalleLeftLegMesh.world,
+                vec3.fromValues(walleXpos, walleYpos, walleZpos)
+              );
+
+              break;
+            case "WalleRightLegMesh":
+              me.WalleRightLegMesh = new Model(
+                me.gl,
+                mesh.vertices,
+                [].concat.apply([], mesh.faces),
+                mesh.normals,
+                vec4.fromValues(0, 1, 1, 1)
+              );
+              mat4.scale(
+                me.WalleRightLegMesh.world,
+                me.WalleRightLegMesh.world,
+                vec3.fromValues(0.392022, 0.392022, 0.392022)
+              );
+              mat4.translate(
+                me.WalleRightLegMesh.world,
+                me.WalleRightLegMesh.world,
+                vec3.fromValues(walleXpos, walleYpos, walleZpos)
+              );
+              break;
+            case "WalleRightUpperArmMesh":
+              me.WalleRightUpperArmMesh = new Model(
+                me.gl,
+                mesh.vertices,
+                [].concat.apply([], mesh.faces),
+                mesh.normals,
+                vec4.fromValues(0, 1, 1, 1)
+              );
+              mat4.scale(
+                me.WalleRightUpperArmMesh.world,
+                me.WalleRightUpperArmMesh.world,
+                vec3.fromValues(0.392022, 0.392022, 0.392022)
+              );
+              mat4.translate(
+                me.WalleRightUpperArmMesh.world,
+                me.WalleRightUpperArmMesh.world,
+                vec3.fromValues(walleXpos, walleYpos, walleZpos)
+              );
+              break;
+            case "WalleRightLowerArmMesh":
+              me.WalleRightLowerArmMesh = new Model(
+                me.gl,
+                mesh.vertices,
+                [].concat.apply([], mesh.faces),
+                mesh.normals,
+                vec4.fromValues(0, 1, 1, 1)
+              );
+              mat4.scale(
+                me.WalleRightLowerArmMesh.world,
+                me.WalleRightLowerArmMesh.world,
+                vec3.fromValues(0.392022, 0.392022, 0.392022)
+              );
+              mat4.translate(
+                me.WalleRightLowerArmMesh.world,
+                me.WalleRightLowerArmMesh.world,
+                vec3.fromValues(walleXpos, walleYpos, walleZpos)
+              );
+              break;
+            case "WalleLeftLowerArmMesh":
+              me.WalleLeftLowerArmMesh = new Model(
+                me.gl,
+                mesh.vertices,
+                [].concat.apply([], mesh.faces),
+                mesh.normals,
+                vec4.fromValues(0, 1, 1, 1)
+              );
+              mat4.scale(
+                me.WalleLeftLowerArmMesh.world,
+                me.WalleLeftLowerArmMesh.world,
+                vec3.fromValues(0.392022, 0.392022, 0.392022)
+              );
+              mat4.translate(
+                me.WalleLeftLowerArmMesh.world,
+                me.WalleLeftLowerArmMesh.world,
+                vec3.fromValues(walleXpos, walleYpos, walleZpos)
+              );
+              break;
+            case "WalleLeftUpperArmMesh":
+              me.WalleLeftUpperArmMesh = new Model(
+                me.gl,
+                mesh.vertices,
+                [].concat.apply([], mesh.faces),
+                mesh.normals,
+                vec4.fromValues(0, 1, 1, 1)
+              );
+              mat4.scale(
+                me.WalleLeftUpperArmMesh.world,
+                me.WalleLeftUpperArmMesh.world,
+                vec3.fromValues(0.392022, 0.392022, 0.392022)
+              );
+              mat4.translate(
+                me.WalleLeftUpperArmMesh.world,
+                me.WalleLeftUpperArmMesh.world,
+                vec3.fromValues(walleXpos, walleYpos, walleZpos)
+              );
+              break;
+            case "WalleHeadMesh":
+              me.WalleHeadMesh = new Model(
+                me.gl,
+                mesh.vertices,
+                [].concat.apply([], mesh.faces),
+                mesh.normals,
+                vec4.fromValues(0, 1, 1, 1)
+              );
+              mat4.scale(
+                me.WalleHeadMesh.world,
+                me.WalleHeadMesh.world,
+                vec3.fromValues(0.392022, 0.392022, 0.392022)
+              );
+              mat4.translate(
+                me.WalleHeadMesh.world,
+                me.WalleHeadMesh.world,
+                vec3.fromValues(walleXpos, walleYpos, walleZpos)
+              );
+              break;
+            case "WalleTorsoMesh":
+              me.WalleTorsoMesh = new Model(
+                me.gl,
+                mesh.vertices,
+                [].concat.apply([], mesh.faces),
+                mesh.normals,
+                vec4.fromValues(0, 1, 1, 1)
+              );
+              mat4.scale(
+                me.WalleTorsoMesh.world,
+                me.WalleTorsoMesh.world,
+                vec3.fromValues(0.392022, 0.392022, 0.392022)
+              );
+              mat4.translate(
+                me.WalleTorsoMesh.world,
+                me.WalleTorsoMesh.world,
+                vec3.fromValues(walleXpos, walleYpos, walleZpos)
+              );
+              break;
+          }
         }
       }
 
@@ -121,6 +291,15 @@ LightMapDemoScene.prototype.Load = function (cb) {
         me.ChalkboardMesh,
         me.LightBulbMesh,
         me.RoomMesh,
+
+        me.WalleLeftLegMesh,
+        me.WalleRightLegMesh,
+        me.WalleRightUpperArmMesh,
+        me.WalleRightLowerArmMesh,
+        me.WalleLeftLowerArmMesh,
+        me.WalleLeftUpperArmMesh,
+        me.WalleHeadMesh,
+        me.WalleTorsoMesh,
       ];
 
       //
@@ -303,7 +482,7 @@ LightMapDemoScene.prototype.Load = function (cb) {
         vec3.fromValues(0, 1, -1), // POVnya; kalau mau geser kiri kanan biar pas, var ketiga ini harus sama kaya var ketiga yg posisi kamera biar pov nya ga miring
         vec3.fromValues(0, 1, 0) //kemiringan kameranya aja
       );
-      
+
       me.projMatrix = mat4.create();
       me.viewMatrix = mat4.create();
 
@@ -399,6 +578,15 @@ LightMapDemoScene.prototype.Unload = function () {
   this.ChairMesh = null;
   this.ChalkboardMesh = null;
   this.RoomMesh = null;
+
+  this.WalleLeftLegMesh = null;
+  this.WalleRightLegMesh = null;
+  this.WalleRightUpperArmMesh = null;
+  this.WalleRightLowerArmMesh = null;
+  this.WalleLeftLowerArmMesh = null;
+  this.WalleLeftUpperArmMesh = null;
+  this.WalleHeadMesh = null;
+  this.WalleTorsoMesh = null;
 
   this.NoShadowProgram = null;
   this.ShadowProgram = null;
