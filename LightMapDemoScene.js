@@ -694,6 +694,35 @@ LightMapDemoScene.prototype.End = function () {
 // Private Methods
 //
 
+var WalleTorsoLoc = vec3.fromValues(1.2409, 0.561914, 2.8015);
+var WalleRightUpperArmLoc = vec3.fromValues(1.49657, 0.840917, 2.53671);
+var WalleLeftUpperArmLoc = vec3.fromValues(0.951443, 0.822344, 3.05589);
+var WalleRightLowerArmLoc = vec3.fromValues(1.55465, 0.751237, 1.97304);
+var WalleLeftLowerArmLoc = vec3.fromValues(0.450769, 1.08849, 3.01258);
+
+var BoxiTorsoLoc = vec3.fromValues(0.106997, 1.00995, -2.09286);
+var BoxiRightHandLoc = vec3.fromValues(0.110793, 1.06969, -2.67071);
+var BoxiLeftHandLoc = vec3.fromValues(0.110793, 1.07005, -1.50526);
+
+var PocongTorsoLoc;
+var PocongRightHandLoc;
+var PocongLeftHandLoc;
+
+var wTorsoTheta = 0;
+var wRUATheta = 0;
+var wLUATheta = 0;
+var wRLATheta = 0;
+var wLLATheta = 0;
+var wHeadTheta = 0;
+
+var bTorsoTheta = 0;
+var bRHTheta = 0;
+var bLHTheta = 0;
+
+var pTorsoTheta = 0;
+var pRHTheta = 0;
+var pLHTheta = 0;
+
 LightMapDemoScene.prototype.initNodes = function (
   meshname,
   theta,
@@ -701,12 +730,12 @@ LightMapDemoScene.prototype.initNodes = function (
 ) {
   // var m = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
   var resetvector = vec3.fromValues(0, 0, 0);
-  var transformChild = false;
 
   switch (meshname) {
     case "WalleTorsoMesh":
-      vector = vec3.fromValues(1.2409, 0.561914, 2.8015);
+      vector = WalleTorsoLoc;
       vec3.scale(resetvector, vector, -1);
+
       // mat4.rotate(m, m, theta);
       mat4.translate(
         this.WalleTorsoMesh.world,
@@ -739,10 +768,12 @@ LightMapDemoScene.prototype.initNodes = function (
 
     case "WalleLeftUpperArmMesh":
       if (vector === null) {
-        vector = vec3.fromValues(0.951443, 0.822344, 3.05589);
+        vector = WalleLeftUpperArmLoc;
       }
+
       vec3.scale(resetvector, vector, -1);
       // mat4.rotate(m, m, theta);
+      var a = this.WalleLeftUpperArmMesh.world;
       mat4.translate(
         this.WalleLeftUpperArmMesh.world,
         this.WalleLeftUpperArmMesh.world,
@@ -753,21 +784,37 @@ LightMapDemoScene.prototype.initNodes = function (
         this.WalleLeftUpperArmMesh.world,
         theta * (Math.PI / 180)
       );
-      //child
-      this.initNodes("WalleLeftLowerArmMesh", theta, vector);
+
       //reset translate ke titik awal
       mat4.translate(
         this.WalleLeftUpperArmMesh.world,
         this.WalleLeftUpperArmMesh.world,
         resetvector
       );
+
+      if ((a = this.WalleLeftUpperArmMesh.world)) {
+        console.log("yes");
+      }
+
+      vec3.rotateY(
+        WalleLeftUpperArmLoc,
+        WalleLeftUpperArmLoc,
+        vector,
+        theta * (Math.PI / 180)
+      );
+      console.log(theta);
+      console.log(WalleLeftUpperArmLoc);
+
+      //child
+      this.initNodes("WalleLeftLowerArmMesh", theta, vector);
 
       break;
 
     case "WalleLeftLowerArmMesh":
       if (vector === null) {
-        vector = vec3.fromValues(0.450769, 1.08849, 3.01258);
+        vector = WalleLeftLowerArmLoc;
       }
+
       vec3.scale(resetvector, vector, -1);
       // mat4.rotate(m, m, theta);
       mat4.translate(
@@ -787,12 +834,24 @@ LightMapDemoScene.prototype.initNodes = function (
         this.WalleLeftLowerArmMesh.world,
         resetvector
       );
+
+      vec3.rotateY(
+        WalleLeftLowerArmLoc,
+        WalleLeftLowerArmLoc,
+        vector,
+        theta * (Math.PI / 180)
+      );
+      console.log("--lla--");
+      console.log(theta);
+      console.log(WalleLeftLowerArmLoc);
+      console.log("----");
       break;
 
     case "WalleRightUpperArmMesh":
       if (vector === null) {
-        vector = vec3.fromValues(1.49657, 0.840917, 2.53671);
+        vector = WalleRightUpperArmLoc;
       }
+
       vec3.scale(resetvector, vector, -1);
       // mat4.rotate(m, m, theta);
       mat4.translate(
@@ -803,24 +862,33 @@ LightMapDemoScene.prototype.initNodes = function (
       mat4.rotateY(
         this.WalleRightUpperArmMesh.world,
         this.WalleRightUpperArmMesh.world,
+        theta * (Math.PI / 180)
+      );
+
+      //reset translate ke titik awal
+      mat4.translate(
+        this.WalleRightUpperArmMesh.world,
+        this.WalleRightUpperArmMesh.world,
+        resetvector
+      );
+
+      vec3.rotateY(
+        WalleRightUpperArmLoc,
+        WalleRightUpperArmLoc,
+        vector,
         theta * (Math.PI / 180)
       );
 
       //child
       this.initNodes("WalleRightLowerArmMesh", theta, vector);
-      //reset translate ke titik awal
-      mat4.translate(
-        this.WalleRightUpperArmMesh.world,
-        this.WalleRightUpperArmMesh.world,
-        resetvector
-      );
 
       break;
 
     case "WalleRightLowerArmMesh":
       if (vector === null) {
-        vector = vec3.fromValues(1.55465, 0.751237, 1.97304);
+        vector = WalleRightLowerArmLoc;
       }
+
       vec3.scale(resetvector, vector, -1);
       // mat4.rotate(m, m, theta);
       mat4.translate(
@@ -839,12 +907,20 @@ LightMapDemoScene.prototype.initNodes = function (
         this.WalleRightLowerArmMesh.world,
         this.WalleRightLowerArmMesh.world,
         resetvector
+      );
+
+      vec3.rotateY(
+        WalleRightLowerArmLoc,
+        WalleRightLowerArmLoc,
+        vector,
+        theta * (Math.PI / 180)
       );
       break;
     case "WalleHeadMesh":
       if (vector === null) {
         vector = vec3.fromValues(1.2409, 0.957854, 2.8015);
       }
+
       vec3.scale(resetvector, vector, -1);
       // mat4.rotate(m, m, theta);
       mat4.translate(
@@ -915,7 +991,7 @@ LightMapDemoScene.prototype.initNodes = function (
       break;
 
     case "BoxiTorsoMesh":
-      vector = vec3.fromValues(0.106997, 1.00995, -2.09286);
+      vector = BoxiTorsoLoc;
       vec3.scale(resetvector, vector, -1);
       // mat4.rotate(m, m, theta);
       mat4.translate(
@@ -928,6 +1004,8 @@ LightMapDemoScene.prototype.initNodes = function (
         this.BoxiTorsoMesh.world,
         theta * (Math.PI / 180)
       );
+      mat4.rotateY(vector, vector, theta * (Math.PI / 180));
+      a;
 
       //reset translate ke titik awal
       mat4.translate(
@@ -944,7 +1022,7 @@ LightMapDemoScene.prototype.initNodes = function (
 
     case "BoxiRightHandMesh":
       if (vector === null) {
-        vector = vec3.fromValues(0.110793, 1.06969, -2.67071);
+        vector = BoxiRightHandLoc;
       }
       vec3.scale(resetvector, vector, -1);
       // mat4.rotate(m, m, theta);
@@ -969,7 +1047,7 @@ LightMapDemoScene.prototype.initNodes = function (
 
     case "BoxiLeftHandMesh":
       if (vector === null) {
-        vector = vec3.fromValues(0.110793, 1.07005, -1.50526);
+        vector = BoxiLeftHandLoc;
       }
       vec3.scale(resetvector, vector, -1);
       // mat4.rotate(m, m, theta);
@@ -1004,66 +1082,85 @@ LightMapDemoScene.prototype._Update = function (dt) {
 
   document.getElementById("walleTorso").onchange = function (event) {
     document.getElementById("walleTorso").value = event.target.value;
-    me.initNodes("WalleTorsoMesh", event.target.value);
+    var rotTheta = event.target.value - wTorsoTheta;
+    wTorsoTheta = event.target.value;
+    me.initNodes("WalleTorsoMesh", rotTheta);
   };
   document.getElementById("walleRightUpperArm").onchange = function (event) {
     document.getElementById("walleRightUpperArm").value = event.target.value;
-    me.initNodes("WalleRightUpperArmMesh", event.target.value, null);
+    var rotTheta = event.target.value - wRUATheta;
+    wRUATheta = event.target.value;
+    me.initNodes("WalleRightUpperArmMesh", rotTheta, null);
   };
 
   document.getElementById("walleLeftUpperArm").onchange = function (event) {
     document.getElementById("walleLeftUpperArm").value = event.target.value;
-    me.initNodes("WalleLeftUpperArmMesh", event.target.value, null);
+    var rotTheta = event.target.value - wLUATheta;
+    wLUATheta = event.target.value;
+    me.initNodes("WalleLeftUpperArmMesh", rotTheta, null);
   };
 
   document.getElementById("walleRightLowerArm").onchange = function (event) {
     document.getElementById("walleRightLowerArm").value = event.target.value;
-    me.initNodes("WalleRightLowerArmMesh", event.target.value, null);
+    var rotTheta = event.target.value - wRLATheta;
+    wRLATheta = event.target.value;
+    me.initNodes("WalleRightLowerArmMesh", rotTheta, null);
   };
 
   document.getElementById("walleLeftLowerArm").onchange = function (event) {
     document.getElementById("walleLeftLowerArm").value = event.target.value;
-    me.initNodes("WalleLeftLowerArmMesh", event.target.value, null);
+    var rotTheta = event.target.value - wLLATheta;
+    wLLATheta = event.target.value;
+    me.initNodes("WalleLeftLowerArmMesh", rotTheta, null);
   };
 
   document.getElementById("walleHead").onchange = function (event) {
     document.getElementById("walleHead").value = event.target.value;
-    me.initNodes("WalleHeadMesh", event.target.value, null);
-  };
-
-  document.getElementById("walleHead").onchange = function (event) {
-    document.getElementById("walleHead").value = event.target.value;
+    var rotTheta = event.target.value - wHeadTheta;
+    wHeadTheta = event.target.value;
     me.initNodes("WalleHeadMesh", event.target.value, null);
   };
 
   document.getElementById("boxiTorso").onchange = function (event) {
     document.getElementById("boxiTorso").value = event.target.value;
-    me.initNodes("BoxiTorsoMesh", event.target.value, null);
+    var rotTheta = event.target.value - bTorsoTheta;
+    bTorsoTheta = event.target.value;
+    me.initNodes("BoxiTorsoMesh", rotTheta, null);
   };
 
   document.getElementById("BoxiRightHand").onchange = function (event) {
     document.getElementById("BoxiRightHand").value = event.target.value;
-    me.initNodes("BoxiRightHandMesh", event.target.value, null);
+    var rotTheta = event.target.value - bRHTheta;
+    bRHTheta = event.target.value;
+    me.initNodes("BoxiRightHandMesh", rotTheta, null);
   };
 
   document.getElementById("BoxiLeftHand").onchange = function (event) {
     document.getElementById("BoxiLeftHand").value = event.target.value;
-    me.initNodes("BoxiLeftHandMesh", event.target.value, null);
+    var rotTheta = event.target.value - bLHTheta;
+    bLHTheta = event.target.value;
+    me.initNodes("BoxiLeftHandMesh", rotTheta, null);
   };
 
   document.getElementById("pocongTorso").onchange = function (event) {
     document.getElementById("pocongTorso").value = event.target.value;
-    me.initNodes("PocongTorsoMesh", event.target.value, null);
+    var rotTheta = event.target.value - pTorsoTheta;
+    pTorsoTheta = event.target.value;
+    me.initNodes("PocongTorsoMesh", rotTheta, null);
   };
 
-  document.getElementById("pocongRightArm").onchange = function (event) {
-    document.getElementById("pocongRightArm").value = event.target.value;
-    me.initNodes("PocongRightArmMesh", event.target.value, null);
+  document.getElementById("pocongRightHand").onchange = function (event) {
+    document.getElementById("pocongRightHand").value = event.target.value;
+    var rotTheta = event.target.value - pRHTheta;
+    pRHTheta = event.target.value;
+    me.initNodes("PocongRightHandMesh", rotTheta, null);
   };
 
-  document.getElementById("pocongLeftArm").onchange = function (event) {
-    document.getElementById("pocongLeftArm").value = event.target.value;
-    me.initNodes("PocongLeftArmMesh", event.target.value, null);
+  document.getElementById("pocongLeftHand").onchange = function (event) {
+    document.getElementById("pocongLeftHand").value = event.target.value;
+    var rotTheta = event.target.value - pLHTheta;
+    pLHTheta = event.target.value;
+    me.initNodes("PocongLeftHandMesh", rotTheta, null);
   };
 
   if (this.PressedKeys.Forward && !this.PressedKeys.Back) {
