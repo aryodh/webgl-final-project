@@ -11,6 +11,7 @@
 var freeLook = true;
 var freeCamera = vec3.fromValues(-5, 1, -1);
 var renderMode = "shade";
+var objectSelected = "walle";
 
 var LightMapDemoScene = function (gl) {
   this.gl = gl;
@@ -1151,46 +1152,80 @@ LightMapDemoScene.prototype.initNodes = function (
 
       vec3.scale(resetvector, vector, -1);
       // mat4.rotate(m, m, theta);
-      mat4.translate(
-        this.WalleTorsoMesh.world,
-        this.WalleTorsoMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleLeftUpperArmMesh.world,
-        this.WalleLeftUpperArmMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleLeftLowerArmMesh.world,
-        this.WalleLeftLowerArmMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleRightUpperArmMesh.world,
-        this.WalleRightUpperArmMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleRightLowerArmMesh.world,
-        this.WalleRightLowerArmMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleHeadMesh.world,
-        this.WalleHeadMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleLeftLegMesh.world,
-        this.WalleLeftLegMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleRightLegMesh.world,
-        this.WalleRightLegMesh.world,
-        vector
-      );
+      if (objectSelected == "walle") {
+        mat4.translate(
+          this.WalleTorsoMesh.world,
+          this.WalleTorsoMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleLeftUpperArmMesh.world,
+          this.WalleLeftUpperArmMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleLeftLowerArmMesh.world,
+          this.WalleLeftLowerArmMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleRightUpperArmMesh.world,
+          this.WalleRightUpperArmMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleRightLowerArmMesh.world,
+          this.WalleRightLowerArmMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleHeadMesh.world,
+          this.WalleHeadMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleLeftLegMesh.world,
+          this.WalleLeftLegMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleRightLegMesh.world,
+          this.WalleRightLegMesh.world,
+          vector
+        );
+      } else if (objectSelected == "boxi") {
+        mat4.translate(
+          this.BoxiTorsoMesh.world,
+          this.BoxiTorsoMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.BoxiLeftHandMesh.world,
+          this.BoxiLeftHandMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.BoxiRightHandMesh.world,
+          this.BoxiRightHandMesh.world,
+          vector
+        );
+      } else if (objectSelected == "eve") {
+        mat4.translate(
+          this.PocongTorsoMesh.world,
+          this.PocongTorsoMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.PocongRightHandMesh.world,
+          this.PocongRightHandMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.PocongLeftHandMesh.world,
+          this.PocongLeftHandMesh.world,
+          vector
+        );
+      }
       // vec3.add(WalleTorsoLoc, WalleTorsoLoc, vector);
       // vec3.add(WalleLeftUpperArmLoc, WalleLeftUpperArmLoc, vector);
       // vec3.add(WalleRightUpperArmLoc, WalleRightUpperArmLoc, vector);
@@ -1210,46 +1245,80 @@ LightMapDemoScene.prototype.initNodes = function (
       }
       vec3.scale(resetvector, vector, -1);
       // mat4.rotate(m, m, theta);
-      mat4.translate(
-        this.WalleTorsoMesh.world,
-        this.WalleTorsoMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleLeftUpperArmMesh.world,
-        this.WalleLeftUpperArmMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleLeftLowerArmMesh.world,
-        this.WalleLeftLowerArmMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleRightUpperArmMesh.world,
-        this.WalleRightUpperArmMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleRightLowerArmMesh.world,
-        this.WalleRightLowerArmMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleHeadMesh.world,
-        this.WalleHeadMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleLeftLegMesh.world,
-        this.WalleLeftLegMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleRightLegMesh.world,
-        this.WalleRightLegMesh.world,
-        vector
-      );
+      if (objectSelected == "walle") {
+        mat4.translate(
+          this.WalleTorsoMesh.world,
+          this.WalleTorsoMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleLeftUpperArmMesh.world,
+          this.WalleLeftUpperArmMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleLeftLowerArmMesh.world,
+          this.WalleLeftLowerArmMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleRightUpperArmMesh.world,
+          this.WalleRightUpperArmMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleRightLowerArmMesh.world,
+          this.WalleRightLowerArmMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleHeadMesh.world,
+          this.WalleHeadMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleLeftLegMesh.world,
+          this.WalleLeftLegMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleRightLegMesh.world,
+          this.WalleRightLegMesh.world,
+          vector
+        );
+      } else if (objectSelected == "boxi") {
+        mat4.translate(
+          this.BoxiTorsoMesh.world,
+          this.BoxiTorsoMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.BoxiLeftHandMesh.world,
+          this.BoxiLeftHandMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.BoxiRightHandMesh.world,
+          this.BoxiRightHandMesh.world,
+          vector
+        );
+      } else if (objectSelected == "eve") {
+        mat4.translate(
+          this.PocongTorsoMesh.world,
+          this.PocongTorsoMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.PocongRightHandMesh.world,
+          this.PocongRightHandMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.PocongLeftHandMesh.world,
+          this.PocongLeftHandMesh.world,
+          vector
+        );
+      }
       // vec3.add(WalleTorsoLoc, WalleTorsoLoc, vector);
       // vec3.add(WalleLeftUpperArmLoc, WalleLeftUpperArmLoc, vector);
       // vec3.add(WalleRightUpperArmLoc, WalleRightUpperArmLoc, vector);
@@ -1268,46 +1337,80 @@ LightMapDemoScene.prototype.initNodes = function (
       }
       vec3.scale(resetvector, vector, -1);
       // mat4.rotate(m, m, theta);
-      mat4.translate(
-        this.WalleTorsoMesh.world,
-        this.WalleTorsoMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleLeftUpperArmMesh.world,
-        this.WalleLeftUpperArmMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleLeftLowerArmMesh.world,
-        this.WalleLeftLowerArmMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleRightUpperArmMesh.world,
-        this.WalleRightUpperArmMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleRightLowerArmMesh.world,
-        this.WalleRightLowerArmMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleHeadMesh.world,
-        this.WalleHeadMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleLeftLegMesh.world,
-        this.WalleLeftLegMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleRightLegMesh.world,
-        this.WalleRightLegMesh.world,
-        vector
-      );
+      if (objectSelected == "walle") {
+        mat4.translate(
+          this.WalleTorsoMesh.world,
+          this.WalleTorsoMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleLeftUpperArmMesh.world,
+          this.WalleLeftUpperArmMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleLeftLowerArmMesh.world,
+          this.WalleLeftLowerArmMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleRightUpperArmMesh.world,
+          this.WalleRightUpperArmMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleRightLowerArmMesh.world,
+          this.WalleRightLowerArmMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleHeadMesh.world,
+          this.WalleHeadMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleLeftLegMesh.world,
+          this.WalleLeftLegMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleRightLegMesh.world,
+          this.WalleRightLegMesh.world,
+          vector
+        );
+      } else if (objectSelected == "boxi") {
+        mat4.translate(
+          this.BoxiTorsoMesh.world,
+          this.BoxiTorsoMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.BoxiLeftHandMesh.world,
+          this.BoxiLeftHandMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.BoxiRightHandMesh.world,
+          this.BoxiRightHandMesh.world,
+          vector
+        );
+      } else if (objectSelected == "eve") {
+        mat4.translate(
+          this.PocongTorsoMesh.world,
+          this.PocongTorsoMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.PocongRightHandMesh.world,
+          this.PocongRightHandMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.PocongLeftHandMesh.world,
+          this.PocongLeftHandMesh.world,
+          vector
+        );
+      }
       // vec3.add(WalleTorsoLoc, WalleTorsoLoc, vector);
       // vec3.add(WalleLeftUpperArmLoc, WalleLeftUpperArmLoc, vector);
       // vec3.add(WalleRightUpperArmLoc, WalleRightUpperArmLoc, vector);
@@ -1326,46 +1429,80 @@ LightMapDemoScene.prototype.initNodes = function (
       }
       vec3.scale(resetvector, vector, -1);
       // mat4.rotate(m, m, theta);
-      mat4.translate(
-        this.WalleTorsoMesh.world,
-        this.WalleTorsoMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleLeftUpperArmMesh.world,
-        this.WalleLeftUpperArmMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleLeftLowerArmMesh.world,
-        this.WalleLeftLowerArmMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleRightUpperArmMesh.world,
-        this.WalleRightUpperArmMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleRightLowerArmMesh.world,
-        this.WalleRightLowerArmMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleHeadMesh.world,
-        this.WalleHeadMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleLeftLegMesh.world,
-        this.WalleLeftLegMesh.world,
-        vector
-      );
-      mat4.translate(
-        this.WalleRightLegMesh.world,
-        this.WalleRightLegMesh.world,
-        vector
-      );
+      if (objectSelected == "walle") {
+        mat4.translate(
+          this.WalleTorsoMesh.world,
+          this.WalleTorsoMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleLeftUpperArmMesh.world,
+          this.WalleLeftUpperArmMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleLeftLowerArmMesh.world,
+          this.WalleLeftLowerArmMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleRightUpperArmMesh.world,
+          this.WalleRightUpperArmMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleRightLowerArmMesh.world,
+          this.WalleRightLowerArmMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleHeadMesh.world,
+          this.WalleHeadMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleLeftLegMesh.world,
+          this.WalleLeftLegMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.WalleRightLegMesh.world,
+          this.WalleRightLegMesh.world,
+          vector
+        );
+      } else if (objectSelected == "boxi") {
+        mat4.translate(
+          this.BoxiTorsoMesh.world,
+          this.BoxiTorsoMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.BoxiLeftHandMesh.world,
+          this.BoxiLeftHandMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.BoxiRightHandMesh.world,
+          this.BoxiRightHandMesh.world,
+          vector
+        );
+      } else if (objectSelected == "eve") {
+        mat4.translate(
+          this.PocongTorsoMesh.world,
+          this.PocongTorsoMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.PocongRightHandMesh.world,
+          this.PocongRightHandMesh.world,
+          vector
+        );
+        mat4.translate(
+          this.PocongLeftHandMesh.world,
+          this.PocongLeftHandMesh.world,
+          vector
+        );
+      }
       // vec3.add(WalleTorsoLoc, WalleTorsoLoc, vector);
       // vec3.add(WalleLeftUpperArmLoc, WalleLeftUpperArmLoc, vector);
       // vec3.add(WalleRightUpperArmLoc, WalleRightUpperArmLoc, vector);
@@ -1624,12 +1761,17 @@ LightMapDemoScene.prototype._Update = function (dt) {
   //   );
   var me = this;
 
-  document.getElementById("Wireframe").onchange = function (event) {
+  document.getElementById("wireframe").onchange = function (event) {
     if (renderMode == "shade") {
       renderMode = "wireframe";
     } else {
       renderMode = "shade";
     }
+  };
+
+  document.getElementById("objectSelector").onchange = function (event) {
+    objectSelected = event.target.value;
+    console.log(objectSelected);
   };
 
   document.getElementById("walleTorso").onchange = function (event) {
