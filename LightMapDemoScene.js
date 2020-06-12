@@ -2,8 +2,6 @@
 
 // const { mat4 } = require("gl-matrix");
 
-// const { mat4 } = require("gl-matrix");
-
 // Array flattening trick from http://stackoverflow.com/questions/10865025/merge-flatten-a-multidimensional-array-in-javascript
 
 var LightMapDemoScene = function (gl) {
@@ -745,13 +743,17 @@ LightMapDemoScene.prototype.initNodes = function (
   var resetvector = vec3.fromValues(0, 0, 0);
   var rotationMat = mat4.create();
   var rotationQuat = quat.create();
+  console.log(theta);
   switch (meshname) {
     case "WalleTorsoMesh":
       vector = WalleTorsoLoc;
       vec3.scale(resetvector, vector, -1);
-      var firstmat = this.WalleTorsoMesh.world;
+      var firstmat = mat4.create();
+      mat4.copy(firstmat, this.WalleTorsoMesh.world);
       var tempmat = mat4.create();
-      console.log(this.WalleTorsoMesh.world);
+      var testmat = mat4.create();
+      mat4.copy(testmat, this.WalleTorsoMesh.world);
+      // console.log(this.WalleTorsoMesh.world);
 
       // mat4.rotate(m, m, theta);
       mat4.translate(
@@ -759,30 +761,62 @@ LightMapDemoScene.prototype.initNodes = function (
         this.WalleTorsoMesh.world,
         vector
       );
+      mat4.translate(testmat, testmat, vector);
 
       mat4.copy(tempmat, this.WalleTorsoMesh.world);
 
       mat4.rotateY(firstmat, firstmat, theta * (Math.PI / 180));
       mat4.getRotation(rotationQuat, firstmat);
       mat4.fromQuat(rotationMat, rotationQuat);
+      mat4.rotateY(testmat, testmat, (theta * Math.PI) / 180);
 
-      mat4.multiply(this.WalleTorsoMesh.world, tempmat, rotationMat);
-
-      //reset translate ke titik awal
-
-      mat4.multiply(this.WalleLeftUpperArmMesh.world, tempmat, rotationMat);
-      mat4.multiply(this.WalleRightUpperArmMesh.world, tempmat, rotationMat);
-      mat4.multiply(this.WalleLeftLowerArmMesh.world, tempmat, rotationMat);
-      mat4.multiply(this.WalleRightLowerArmMesh.world, tempmat, rotationMat);
-      mat4.multiply(this.WalleHeadMesh.world, tempmat, rotationMat);
-      mat4.multiply(this.WalleLeftLegMesh.world, tempmat, rotationMat);
-      mat4.multiply(this.WalleRightLegMesh.world, tempmat, rotationMat);
+      mat4.rotateY(this.WalleTorsoMesh.world, tempmat, theta * (Math.PI / 180));
+      mat4.rotateY(
+        this.WalleLeftUpperArmMesh.world,
+        tempmat,
+        theta * (Math.PI / 180)
+      );
+      mat4.rotateY(
+        this.WalleRightUpperArmMesh.world,
+        tempmat,
+        theta * (Math.PI / 180)
+      );
+      mat4.rotateY(
+        this.WalleLeftLowerArmMesh.world,
+        tempmat,
+        theta * (Math.PI / 180)
+      );
+      mat4.rotateY(
+        this.WalleRightLowerArmMesh.world,
+        tempmat,
+        theta * (Math.PI / 180)
+      );
+      mat4.rotateY(this.WalleHeadMesh.world, tempmat, theta * (Math.PI / 180));
+      mat4.rotateY(
+        this.WalleLeftLegMesh.world,
+        tempmat,
+        theta * (Math.PI / 180)
+      );
+      mat4.rotateY(
+        this.WalleRightLegMesh.world,
+        tempmat,
+        theta * (Math.PI / 180)
+      );
 
       mat4.translate(
         this.WalleTorsoMesh.world,
         this.WalleTorsoMesh.world,
         resetvector
       );
+
+      mat4.translate(testmat, testmat, resetvector);
+
+      console.log("----");
+      console.log(firstmat);
+      console.log(testmat);
+      console.log(this.WalleTorsoMesh.world);
+      console.log("----");
+
       mat4.translate(
         this.WalleLeftUpperArmMesh.world,
         this.WalleLeftUpperArmMesh.world,
@@ -1143,6 +1177,12 @@ LightMapDemoScene.prototype.initNodes = function (
         this.WalleRightLegMesh.world,
         vector
       );
+      // vec3.add(WalleTorsoLoc, WalleTorsoLoc, vector);
+      // vec3.add(WalleLeftUpperArmLoc, WalleLeftUpperArmLoc, vector);
+      // vec3.add(WalleRightUpperArmLoc, WalleRightUpperArmLoc, vector);
+      // vec3.add(WalleRightLowerArmLoc, WalleRightLowerArmLoc, vector);
+      // vec3.add(WalleRightLowerArmLoc, WalleRightLowerArmLoc, vector);
+      // console.log(WalleRightUpperArmLoc);
       break;
 
     case "WalleMoveBack":
@@ -1191,6 +1231,11 @@ LightMapDemoScene.prototype.initNodes = function (
         this.WalleRightLegMesh.world,
         vector
       );
+      // vec3.add(WalleTorsoLoc, WalleTorsoLoc, vector);
+      // vec3.add(WalleLeftUpperArmLoc, WalleLeftUpperArmLoc, vector);
+      // vec3.add(WalleRightUpperArmLoc, WalleRightUpperArmLoc, vector);
+      // vec3.add(WalleRightLowerArmLoc, WalleRightLowerArmLoc, vector);
+      // vec3.add(WalleRightLowerArmLoc, WalleRightLowerArmLoc, vector);
       break;
 
     case "WalleMoveRight":
@@ -1239,6 +1284,11 @@ LightMapDemoScene.prototype.initNodes = function (
         this.WalleRightLegMesh.world,
         vector
       );
+      // vec3.add(WalleTorsoLoc, WalleTorsoLoc, vector);
+      // vec3.add(WalleLeftUpperArmLoc, WalleLeftUpperArmLoc, vector);
+      // vec3.add(WalleRightUpperArmLoc, WalleRightUpperArmLoc, vector);
+      // vec3.add(WalleRightLowerArmLoc, WalleRightLowerArmLoc, vector);
+      // vec3.add(WalleRightLowerArmLoc, WalleRightLowerArmLoc, vector);
       break;
 
     case "WalleMoveLeft":
@@ -1287,6 +1337,11 @@ LightMapDemoScene.prototype.initNodes = function (
         this.WalleRightLegMesh.world,
         vector
       );
+      // vec3.add(WalleTorsoLoc, WalleTorsoLoc, vector);
+      // vec3.add(WalleLeftUpperArmLoc, WalleLeftUpperArmLoc, vector);
+      // vec3.add(WalleRightUpperArmLoc, WalleRightUpperArmLoc, vector);
+      // vec3.add(WalleRightLowerArmLoc, WalleRightLowerArmLoc, vector);
+      // vec3.add(WalleRightLowerArmLoc, WalleRightLowerArmLoc, vector);
       break;
 
     case "BoxiTorsoMesh":
