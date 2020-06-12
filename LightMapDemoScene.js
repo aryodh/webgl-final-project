@@ -1103,6 +1103,7 @@ LightMapDemoScene.prototype.initNodes = function (
       if (vector === null) {
         vector = vec3.fromValues(0.1, 0, 0);
       }
+      this.camera.moveWallE(vector);
       vec3.scale(resetvector, vector, -1);
       // mat4.rotate(m, m, theta);
       mat4.translate(
@@ -1151,6 +1152,7 @@ LightMapDemoScene.prototype.initNodes = function (
       if (vector === null) {
         vector = vec3.fromValues(-0.1, 0, 0);
       }
+      this.camera.moveWallE(vector);
       vec3.scale(resetvector, vector, -1);
       // mat4.rotate(m, m, theta);
       mat4.translate(
@@ -1199,6 +1201,7 @@ LightMapDemoScene.prototype.initNodes = function (
       if (vector === null) {
         vector = vec3.fromValues(0, 0, 0.1);
       }
+      this.camera.moveWallE(vector);
       vec3.scale(resetvector, vector, -1);
       // mat4.rotate(m, m, theta);
       mat4.translate(
@@ -1247,6 +1250,7 @@ LightMapDemoScene.prototype.initNodes = function (
       if (vector === null) {
         vector = vec3.fromValues(0, 0, -0.1);
       }
+      this.camera.moveWallE(vector);
       vec3.scale(resetvector, vector, -1);
       // mat4.rotate(m, m, theta);
       mat4.translate(
@@ -1881,13 +1885,21 @@ LightMapDemoScene.prototype._OnResizeWindow = function () {
   gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 };
 
+var freeLook = true;
+
 LightMapDemoScene.prototype._OnKeyDown = function (e) {
   switch (e.code) {
+    case "KeyN":
+      if (freeLook){
+        freeLook = false;
+      }
+      else {
+        freeLook = true;
+      }
+      this.PressedKeys.ChangeCamera = true;
+      break;
     case "KeyW":
       this.PressedKeys.Forward = true;
-      break;
-    case "KeyK":
-      this.PressedKeys.ChangeCamera = true;
       break;
     case "KeyA":
       this.PressedKeys.Left = true;
@@ -1927,11 +1939,11 @@ LightMapDemoScene.prototype._OnKeyDown = function (e) {
 
 LightMapDemoScene.prototype._OnKeyUp = function (e) {
   switch (e.code) {
+    case "KeyN":
+      this.PressedKeys.ChangeCamera = false;
+      break;
     case "KeyW":
       this.PressedKeys.Forward = false;
-      break;
-    case "KeyK":
-      this.PressedKeys.ChangeCamera = false;
       break;
     case "KeyA":
       this.PressedKeys.Left = false;

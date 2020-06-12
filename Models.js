@@ -108,8 +108,13 @@ Camera.prototype._realign = function () {
 };
 
 Camera.prototype.moveForward = function (dist) {
+  console.log(this.forward);
   vec3.scaleAndAdd(this.position, this.position, this.forward, dist);
 };
+
+Camera.prototype.moveWallE = function (dist) {
+  vec3.add(this.position, this.position, dist);
+}
 
 Camera.prototype.moveRight = function (dist) {
   vec3.scaleAndAdd(this.position, this.position, this.right, dist);
