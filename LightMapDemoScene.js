@@ -70,6 +70,7 @@ LightMapDemoScene.prototype.Load = function (cb) {
 
             break;
           case "ChalkboardMesh":
+            console.log("rendered");
             me.ChalkboardMesh = new Model(
               me.gl,
               mesh.vertices,
@@ -79,7 +80,7 @@ LightMapDemoScene.prototype.Load = function (cb) {
             );
             break;
           case "LightBulbMesh":
-            me.lightPosition = vec3.fromValues(0, 0.0, 0);
+            me.lightPosition = vec3.fromValues(0, 5.0, 0);
             me.LightBulbMesh = new Model(
               me.gl,
               mesh.vertices,
@@ -595,6 +596,11 @@ LightMapDemoScene.prototype.Load = function (cb) {
 
     RotLeft: false,
     RotRight: false,
+
+    WalleForward: false,
+    WalleBack: false,
+    WalleRight: false,
+    WalleLeft: false,
   };
 
   me.MoveForwardSpeed = 3.5;
@@ -1090,6 +1096,198 @@ LightMapDemoScene.prototype.initNodes = function (
         theta * (Math.PI / 180)
       );
       break;
+    
+    case "WalleMoveForward":
+      if (vector === null) {
+        vector = vec3.fromValues(0.1, 0, 0);
+      }
+      vec3.scale(resetvector, vector, -1);
+      // mat4.rotate(m, m, theta);
+      mat4.translate(
+        this.WalleTorsoMesh.world,
+        this.WalleTorsoMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleLeftUpperArmMesh.world,
+        this.WalleLeftUpperArmMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleLeftLowerArmMesh.world,
+        this.WalleLeftLowerArmMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleRightUpperArmMesh.world,
+        this.WalleRightUpperArmMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleRightLowerArmMesh.world,
+        this.WalleRightLowerArmMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleHeadMesh.world,
+        this.WalleHeadMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleLeftLegMesh.world,
+        this.WalleLeftLegMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleRightLegMesh.world,
+        this.WalleRightLegMesh.world,
+        vector
+      );
+      break;
+
+    case "WalleMoveBack":
+      if (vector === null) {
+        vector = vec3.fromValues(-0.1, 0, 0);
+      }
+      vec3.scale(resetvector, vector, -1);
+      // mat4.rotate(m, m, theta);
+      mat4.translate(
+        this.WalleTorsoMesh.world,
+        this.WalleTorsoMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleLeftUpperArmMesh.world,
+        this.WalleLeftUpperArmMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleLeftLowerArmMesh.world,
+        this.WalleLeftLowerArmMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleRightUpperArmMesh.world,
+        this.WalleRightUpperArmMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleRightLowerArmMesh.world,
+        this.WalleRightLowerArmMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleHeadMesh.world,
+        this.WalleHeadMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleLeftLegMesh.world,
+        this.WalleLeftLegMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleRightLegMesh.world,
+        this.WalleRightLegMesh.world,
+        vector
+      );
+      break;
+
+    case "WalleMoveRight":
+      if (vector === null) {
+        vector = vec3.fromValues(0, 0, 0.1);
+      }
+      vec3.scale(resetvector, vector, -1);
+      // mat4.rotate(m, m, theta);
+      mat4.translate(
+        this.WalleTorsoMesh.world,
+        this.WalleTorsoMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleLeftUpperArmMesh.world,
+        this.WalleLeftUpperArmMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleLeftLowerArmMesh.world,
+        this.WalleLeftLowerArmMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleRightUpperArmMesh.world,
+        this.WalleRightUpperArmMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleRightLowerArmMesh.world,
+        this.WalleRightLowerArmMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleHeadMesh.world,
+        this.WalleHeadMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleLeftLegMesh.world,
+        this.WalleLeftLegMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleRightLegMesh.world,
+        this.WalleRightLegMesh.world,
+        vector
+      );
+      break;
+
+    case "WalleMoveLeft":
+      if (vector === null) {
+        vector = vec3.fromValues(0, 0, -0.1);
+      }
+      vec3.scale(resetvector, vector, -1);
+      // mat4.rotate(m, m, theta);
+      mat4.translate(
+        this.WalleTorsoMesh.world,
+        this.WalleTorsoMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleLeftUpperArmMesh.world,
+        this.WalleLeftUpperArmMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleLeftLowerArmMesh.world,
+        this.WalleLeftLowerArmMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleRightUpperArmMesh.world,
+        this.WalleRightUpperArmMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleRightLowerArmMesh.world,
+        this.WalleRightLowerArmMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleHeadMesh.world,
+        this.WalleHeadMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleLeftLegMesh.world,
+        this.WalleLeftLegMesh.world,
+        vector
+      );
+      mat4.translate(
+        this.WalleRightLegMesh.world,
+        this.WalleRightLegMesh.world,
+        vector
+      );
+      break;
 
     case "BoxiTorsoMesh":
       vector = BoxiTorsoLoc;
@@ -1445,6 +1643,25 @@ LightMapDemoScene.prototype._Update = function (dt) {
     this.camera.rotateRight((dt / 1000) * this.RotateSpeed);
   }
 
+  if (this.PressedKeys.WalleForward && !this.PressedKeys.WalleBack) {
+    me.initNodes("WalleMoveForward", null);
+  }
+  
+  if (this.PressedKeys.WalleBack && !this.PressedKeys.WalleForward) {
+    me.initNodes("WalleMoveBack", null);
+
+  }
+
+  if (this.PressedKeys.WalleRight && !this.PressedKeys.WalleLeft) {
+    me.initNodes("WalleMoveRight", null);
+
+  }
+
+  if (this.PressedKeys.WalleLeft && !this.PressedKeys.WalleRight) {
+    me.initNodes("WalleMoveLeft", null);
+
+  }
+
   this.lightDisplacementInputAngle += dt / 2337;
   var xDisplacement = Math.sin(this.lightDisplacementInputAngle) * 2.8;
 
@@ -1685,6 +1902,18 @@ LightMapDemoScene.prototype._OnKeyDown = function (e) {
     case "ArrowLeft":
       this.PressedKeys.RotLeft = true;
       break;
+    case "KeyI":
+      this.PressedKeys.WalleForward = true;
+      break;
+    case "KeyK":
+      this.PressedKeys.WalleBack = true;
+      break;
+    case "KeyL":
+      this.PressedKeys.WalleRight = true;
+      break;
+    case "KeyJ":
+      this.PressedKeys.WalleLeft = true;
+      break;
   }
 };
 
@@ -1713,6 +1942,18 @@ LightMapDemoScene.prototype._OnKeyUp = function (e) {
       break;
     case "ArrowLeft":
       this.PressedKeys.RotLeft = false;
+      break;
+    case "KeyI":
+      this.PressedKeys.WalleForward = false;
+      break;
+    case "KeyK":
+      this.PressedKeys.WalleBack = false;
+      break;
+    case "KeyL":
+      this.PressedKeys.WalleRight = false;
+      break;
+    case "KeyJ":
+      this.PressedKeys.WalleLeft = false;
       break;
   }
 };
