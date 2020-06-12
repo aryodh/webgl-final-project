@@ -110,6 +110,7 @@ Camera.prototype._realign = function () {
 
 Camera.prototype.moveForward = function (dist) {
   vec3.scaleAndAdd(this.position, this.position, this.forward, dist);
+  console.log(this.position);
 };
 
 Camera.prototype.moveWallE = function (dist) {

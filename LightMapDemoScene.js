@@ -1,5 +1,9 @@
 "use strict";
 
+// const { vec3 } = require("gl-matrix");
+
+// const { vec3 } = require("gl-matrix");
+
 // const { mat4 } = require("gl-matrix");
 
 // const { mat4 } = require("gl-matrix");
@@ -7,6 +11,7 @@
 // Array flattening trick from http://stackoverflow.com/questions/10865025/merge-flatten-a-multidimensional-array-in-javascript
 
 var freeLook = true;
+var freeCamera = vec3.fromValues(-5, 1, -1);
 
 var LightMapDemoScene = function (gl) {
   this.gl = gl;
@@ -709,6 +714,7 @@ LightMapDemoScene.prototype.End = function () {
 
 var WalleTorsoLoc = vec3.fromValues(1.2409, 0.561914, 2.8015);
 var WalleHeadLoc = vec3.fromValues(1.05582, 1.30675, 2.5989);
+var camAwal = vec3.fromValues(1.05582, 1.7, 2.5989);
 var WalleRightUpperArmLoc = vec3.fromValues(1.49657, 0.840917, 2.53671);
 var WalleLeftUpperArmLoc = vec3.fromValues(0.951443, 0.822344, 3.05589);
 var WalleRightLowerArmLoc = vec3.fromValues(1.55465, 0.751237, 1.97304);
@@ -1112,7 +1118,14 @@ LightMapDemoScene.prototype.initNodes = function (
       if (vector === null) {
         vector = vec3.fromValues(0.1, 0, 0);
       }
-      this.camera.moveWallE(vector);
+      if (!freeLook){
+        this.camera.moveWallE(vector);
+      }
+      else {
+        vec3.add(camAwal, camAwal, vector);
+      }
+      console.log(freeLook);
+      
       vec3.scale(resetvector, vector, -1);
       // mat4.rotate(m, m, theta);
       mat4.translate(
@@ -1161,7 +1174,12 @@ LightMapDemoScene.prototype.initNodes = function (
       if (vector === null) {
         vector = vec3.fromValues(-0.1, 0, 0);
       }
-      this.camera.moveWallE(vector);
+      if (!freeLook){
+        this.camera.moveWallE(vector);
+      }
+      else {
+        vec3.add(camAwal, camAwal, vector);
+      }
       vec3.scale(resetvector, vector, -1);
       // mat4.rotate(m, m, theta);
       mat4.translate(
@@ -1210,7 +1228,12 @@ LightMapDemoScene.prototype.initNodes = function (
       if (vector === null) {
         vector = vec3.fromValues(0, 0, 0.1);
       }
-      this.camera.moveWallE(vector);
+      if (!freeLook){
+        this.camera.moveWallE(vector);
+      }
+      else {
+        vec3.add(camAwal, camAwal, vector);
+      }
       vec3.scale(resetvector, vector, -1);
       // mat4.rotate(m, m, theta);
       mat4.translate(
@@ -1259,7 +1282,12 @@ LightMapDemoScene.prototype.initNodes = function (
       if (vector === null) {
         vector = vec3.fromValues(0, 0, -0.1);
       }
-      this.camera.moveWallE(vector);
+      if (!freeLook){
+        this.camera.moveWallE(vector);
+      }
+      else {
+        vec3.add(camAwal, camAwal, vector);
+      }
       vec3.scale(resetvector, vector, -1);
       // mat4.rotate(m, m, theta);
       mat4.translate(
@@ -1635,8 +1663,14 @@ LightMapDemoScene.prototype._Update = function (dt) {
   if (this.PressedKeys.ChangeCamera) {
     // var tujuanKamera = vec3.create();
     // vec3.rotateY(tujuanKamera, )
-    console.log(camWallTheta);
-    this.camera.moveToWallE(WalleHeadLoc, camWallTheta);
+    if (freeLook){
+      console.log("masuk");
+      this.camera.moveToWallE(camAwal, camWallTheta);
+    }
+    else {
+      this.camera.moveToWallE(freeCamera, Math.PI);
+    }
+    
   }
 
   if (this.PressedKeys.Back && !this.PressedKeys.Forward) {
@@ -1662,6 +1696,7 @@ LightMapDemoScene.prototype._Update = function (dt) {
   if (this.PressedKeys.RotRight && !this.PressedKeys.RotLeft) {
     if (freeLook){
       this.camera.rotateRight((-dt / 1000) * this.RotateSpeed);
+      camWallTheta -= ((-dt / 1000) * this.RotateSpeed) * (180/Math.PI);
     }
     else {
       this.camera.rotateRight((-dt / 1000) * this.RotateSpeed);
@@ -1913,12 +1948,6 @@ LightMapDemoScene.prototype._OnResizeWindow = function () {
 LightMapDemoScene.prototype._OnKeyDown = function (e) {
   switch (e.code) {
     case "KeyN":
-      if (freeLook){
-        freeLook = false;
-      }
-      else {
-        freeLook = true;
-      }
       this.PressedKeys.ChangeCamera = true;
       break;
     case "KeyW":
@@ -1963,6 +1992,12 @@ LightMapDemoScene.prototype._OnKeyDown = function (e) {
 LightMapDemoScene.prototype._OnKeyUp = function (e) {
   switch (e.code) {
     case "KeyN":
+      if (freeLook){
+        freeLook = false;
+      }
+      else {
+        freeLook = true;
+      }
       this.PressedKeys.ChangeCamera = false;
       break;
     case "KeyW":
