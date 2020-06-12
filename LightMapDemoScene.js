@@ -6,6 +6,8 @@
 
 // Array flattening trick from http://stackoverflow.com/questions/10865025/merge-flatten-a-multidimensional-array-in-javascript
 
+var freeLook = true;
+
 var LightMapDemoScene = function (gl) {
   this.gl = gl;
 };
@@ -754,12 +756,12 @@ LightMapDemoScene.prototype.initNodes = function (
       vec3.scale(resetvector, vector, -1);
       var firstmat = this.WalleTorsoMesh.world;
       var tempmat = mat4.create();
-      console.log(this.WalleTorsoMesh.world);
+      //console.log(this.WalleTorsoMesh.world);
 
-      console.log(freeLook);
-      if (!freeLook) {
-        this.camera.rotateRight(theta * (Math.PI/180));
-      }
+      //console.log(freeLook);
+      // if (!freeLook) {
+      //   this.camera.rotateRight(theta * (Math.PI/180));
+      // }
 
       // mat4.rotate(m, m, theta);
       mat4.translate(
@@ -1655,11 +1657,23 @@ LightMapDemoScene.prototype._Update = function (dt) {
   }
 
   if (this.PressedKeys.RotRight && !this.PressedKeys.RotLeft) {
-    this.camera.rotateRight((-dt / 1000) * this.RotateSpeed);
+    if (freeLook){
+      this.camera.rotateRight((-dt / 1000) * this.RotateSpeed);
+    }
+    else {
+      this.camera.rotateRight((-dt / 1000) * this.RotateSpeed);
+      me.initNodes("WalleTorsoMesh", ((-dt / 1000) * this.RotateSpeed) * (180/Math.PI));
+    }
   }
 
   if (this.PressedKeys.RotLeft && !this.PressedKeys.RotRight) {
-    this.camera.rotateRight((dt / 1000) * this.RotateSpeed);
+    if (freeLook){
+      this.camera.rotateRight((dt / 1000) * this.RotateSpeed);
+    }
+    else{
+      this.camera.rotateRight((dt / 1000) * this.RotateSpeed);
+      me.initNodes("WalleTorsoMesh", ((dt / 1000) * this.RotateSpeed));
+    }
   }
 
   if (this.PressedKeys.WalleForward && !this.PressedKeys.WalleBack) {
@@ -1891,8 +1905,6 @@ LightMapDemoScene.prototype._OnResizeWindow = function () {
 
   gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 };
-
-var freeLook = true;
 
 LightMapDemoScene.prototype._OnKeyDown = function (e) {
   switch (e.code) {
