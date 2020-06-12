@@ -1759,9 +1759,14 @@ LightMapDemoScene.prototype._Update = function (dt) {
   if (this.PressedKeys.RotLeft && !this.PressedKeys.RotRight) {
     if (freeLook) {
       this.camera.rotateRight((dt / 1000) * this.RotateSpeed);
+      camWallTheta -= (dt / 1000) * this.RotateSpeed * (180 / Math.PI);
     } else {
       this.camera.rotateRight((dt / 1000) * this.RotateSpeed);
-      me.initNodes("WalleTorsoMesh", (dt / 1000) * this.RotateSpeed);
+      console.log((dt / 1000) * this.RotateSpeed);
+      me.initNodes(
+        "WalleTorsoMesh",
+        (dt / 1000) * this.RotateSpeed * (180 / Math.PI)
+      );
     }
   }
 
