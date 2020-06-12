@@ -729,6 +729,7 @@ var wLUATheta = 0;
 var wRLATheta = 0;
 var wLLATheta = 0;
 var wHeadTheta = 0;
+var camWallTheta = Math.PI;
 
 var bTorsoTheta = 0;
 var bRHTheta = 0;
@@ -754,6 +755,11 @@ LightMapDemoScene.prototype.initNodes = function (
       var firstmat = this.WalleTorsoMesh.world;
       var tempmat = mat4.create();
       console.log(this.WalleTorsoMesh.world);
+
+      console.log(freeLook);
+      if (!freeLook) {
+        this.camera.rotateRight(theta * (Math.PI/180));
+      }
 
       // mat4.rotate(m, m, theta);
       mat4.translate(
@@ -1538,6 +1544,7 @@ LightMapDemoScene.prototype._Update = function (dt) {
     document.getElementById("walleTorso").value = event.target.value;
     var rotTheta = event.target.value - wTorsoTheta;
     wTorsoTheta = event.target.value;
+    console.log(rotTheta);
     me.initNodes("WalleTorsoMesh", rotTheta);
   };
   document.getElementById("walleRightUpperArm").onchange = function (event) {
@@ -1624,7 +1631,7 @@ LightMapDemoScene.prototype._Update = function (dt) {
   if (this.PressedKeys.ChangeCamera) {
     // var tujuanKamera = vec3.create();
     // vec3.rotateY(tujuanKamera, )
-    this.camera.moveToWallE(WalleHeadLoc);
+    this.camera.moveToWallE(WalleHeadLoc, Math.PI);
   }
 
   if (this.PressedKeys.Back && !this.PressedKeys.Forward) {

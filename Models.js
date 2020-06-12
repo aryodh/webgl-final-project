@@ -92,6 +92,7 @@ Camera.prototype.GetViewMatrix = function (out) {
 };
 
 Camera.prototype.rotateRight = function (rad) {
+  console.log(rad);
   var rightMatrix = mat4.create();
   mat4.rotate(rightMatrix, rightMatrix, rad, vec3.fromValues(0, 1, 0));
   vec3.transformMat4(this.forward, this.forward, rightMatrix);
@@ -108,7 +109,6 @@ Camera.prototype._realign = function () {
 };
 
 Camera.prototype.moveForward = function (dist) {
-  console.log(this.forward);
   vec3.scaleAndAdd(this.position, this.position, this.forward, dist);
 };
 
@@ -124,7 +124,7 @@ Camera.prototype.moveUp = function (dist) {
   vec3.scaleAndAdd(this.position, this.position, this.up, dist);
 };
 
-Camera.prototype.moveToWallE = function (position) {
+Camera.prototype.moveToWallE = function (position, theta) {
   this.position = position;
-  this.rotateRight(Math.PI);
+  this.rotateRight(theta);
 }
