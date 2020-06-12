@@ -1656,9 +1656,7 @@ LightMapDemoScene.prototype._Update = function (dt) {
     me.initNodes("PocongLeftHandMesh", rotTheta, null);
   };
 
-  if (this.PressedKeys.Forward && !this.PressedKeys.Back) {
-    this.camera.moveForward((dt / 1000) * this.MoveForwardSpeed);
-  }
+  
 
   if (this.PressedKeys.ChangeCamera) {
     // var tujuanKamera = vec3.create();
@@ -1672,25 +1670,29 @@ LightMapDemoScene.prototype._Update = function (dt) {
     }
     
   }
-
-  if (this.PressedKeys.Back && !this.PressedKeys.Forward) {
-    this.camera.moveForward((-dt / 1000) * this.MoveForwardSpeed);
-  }
-
-  if (this.PressedKeys.Right && !this.PressedKeys.Left) {
-    this.camera.moveRight((dt / 1000) * this.MoveForwardSpeed);
-  }
-
-  if (this.PressedKeys.Left && !this.PressedKeys.Right) {
-    this.camera.moveRight((-dt / 1000) * this.MoveForwardSpeed);
-  }
-
-  if (this.PressedKeys.Up && !this.PressedKeys.Down) {
-    this.camera.moveUp((dt / 1000) * this.MoveForwardSpeed);
-  }
-
-  if (this.PressedKeys.Down && !this.PressedKeys.Up) {
-    this.camera.moveUp((-dt / 1000) * this.MoveForwardSpeed);
+  if (freeLook) {
+    if (this.PressedKeys.Forward && !this.PressedKeys.Back) {
+      this.camera.moveForward((dt / 1000) * this.MoveForwardSpeed);
+    }
+    if (this.PressedKeys.Back && !this.PressedKeys.Forward) {
+      this.camera.moveForward((-dt / 1000) * this.MoveForwardSpeed);
+    }
+  
+    if (this.PressedKeys.Right && !this.PressedKeys.Left) {
+      this.camera.moveRight((dt / 1000) * this.MoveForwardSpeed);
+    }
+  
+    if (this.PressedKeys.Left && !this.PressedKeys.Right) {
+      this.camera.moveRight((-dt / 1000) * this.MoveForwardSpeed);
+    }
+  
+    if (this.PressedKeys.Up && !this.PressedKeys.Down) {
+      this.camera.moveUp((dt / 1000) * this.MoveForwardSpeed);
+    }
+  
+    if (this.PressedKeys.Down && !this.PressedKeys.Up) {
+      this.camera.moveUp((-dt / 1000) * this.MoveForwardSpeed);
+    }
   }
 
   if (this.PressedKeys.RotRight && !this.PressedKeys.RotLeft) {
