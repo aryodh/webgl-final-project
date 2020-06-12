@@ -588,6 +588,7 @@ LightMapDemoScene.prototype.Load = function (cb) {
     Left: false,
     Forward: false,
     Back: false,
+    ChangeCamera: false,
 
     RotLeft: false,
     RotRight: false,
@@ -695,6 +696,7 @@ LightMapDemoScene.prototype.End = function () {
 //
 
 var WalleTorsoLoc = vec3.fromValues(1.2409, 0.561914, 2.8015);
+var WalleHeadLoc = vec3.fromValues(1.05582, 1.30675, 2.5989);
 var WalleRightUpperArmLoc = vec3.fromValues(1.49657, 0.840917, 2.53671);
 var WalleLeftUpperArmLoc = vec3.fromValues(0.951443, 0.822344, 3.05589);
 var WalleRightLowerArmLoc = vec3.fromValues(1.55465, 0.751237, 1.97304);
@@ -1167,6 +1169,12 @@ LightMapDemoScene.prototype._Update = function (dt) {
     this.camera.moveForward((dt / 1000) * this.MoveForwardSpeed);
   }
 
+  if (this.PressedKeys.ChangeCamera) {
+    // var tujuanKamera = vec3.create();
+    // vec3.rotateY(tujuanKamera, )
+    this.camera.moveToWallE(WalleHeadLoc);
+  }
+
   if (this.PressedKeys.Back && !this.PressedKeys.Forward) {
     this.camera.moveForward((-dt / 1000) * this.MoveForwardSpeed);
   }
@@ -1414,6 +1422,9 @@ LightMapDemoScene.prototype._OnKeyDown = function (e) {
     case "KeyW":
       this.PressedKeys.Forward = true;
       break;
+    case "KeyK":
+      this.PressedKeys.ChangeCamera = true;
+      break;
     case "KeyA":
       this.PressedKeys.Left = true;
       break;
@@ -1442,6 +1453,9 @@ LightMapDemoScene.prototype._OnKeyUp = function (e) {
   switch (e.code) {
     case "KeyW":
       this.PressedKeys.Forward = false;
+      break;
+    case "KeyK":
+      this.PressedKeys.ChangeCamera = false;
       break;
     case "KeyA":
       this.PressedKeys.Left = false;

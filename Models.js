@@ -118,3 +118,8 @@ Camera.prototype.moveRight = function (dist) {
 Camera.prototype.moveUp = function (dist) {
   vec3.scaleAndAdd(this.position, this.position, this.up, dist);
 };
+
+Camera.prototype.moveToWallE = function (position) {
+  this.position = position;
+  this.rotateRight(Math.PI);
+}
