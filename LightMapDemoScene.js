@@ -1096,7 +1096,7 @@ LightMapDemoScene.prototype.initNodes = function (
         theta * (Math.PI / 180)
       );
       break;
-    
+
     case "WalleMoveForward":
       if (vector === null) {
         vector = vec3.fromValues(0.1, 0, 0);
@@ -1646,20 +1646,17 @@ LightMapDemoScene.prototype._Update = function (dt) {
   if (this.PressedKeys.WalleForward && !this.PressedKeys.WalleBack) {
     me.initNodes("WalleMoveForward", null);
   }
-  
+
   if (this.PressedKeys.WalleBack && !this.PressedKeys.WalleForward) {
     me.initNodes("WalleMoveBack", null);
-
   }
 
   if (this.PressedKeys.WalleRight && !this.PressedKeys.WalleLeft) {
     me.initNodes("WalleMoveRight", null);
-
   }
 
   if (this.PressedKeys.WalleLeft && !this.PressedKeys.WalleRight) {
     me.initNodes("WalleMoveLeft", null);
-
   }
 
   this.lightDisplacementInputAngle += dt / 2337;
