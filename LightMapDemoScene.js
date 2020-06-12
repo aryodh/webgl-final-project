@@ -10,6 +10,7 @@
 
 var freeLook = true;
 var freeCamera = vec3.fromValues(-5, 1, -1);
+var renderMode = "shade";
 
 var LightMapDemoScene = function (gl) {
   this.gl = gl;
@@ -58,6 +59,7 @@ LightMapDemoScene.prototype.Load = function (cb) {
       console.log(loadResults.Models.RoomModel.meshes.length);
       for (var i = 0; i < loadResults.Models.RoomModel.meshes.length; i++) {
         var mesh = loadResults.Models.RoomModel.meshes[i];
+        console.log(mesh.name, i);
         switch (mesh.name) {
           case "ChairMesh":
             me.ChairMesh = new Model(
@@ -1622,6 +1624,14 @@ LightMapDemoScene.prototype._Update = function (dt) {
   //   );
   var me = this;
 
+  document.getElementById("Wireframe").onchange = function (event) {
+    if (renderMode == "shade") {
+      renderMode = "wireframe";
+    } else {
+      renderMode = "shade";
+    }
+  };
+
   document.getElementById("walleTorso").onchange = function (event) {
     document.getElementById("walleTorso").value = event.target.value;
     var rotTheta = event.target.value - wTorsoTheta;
@@ -1879,12 +1889,21 @@ LightMapDemoScene.prototype._GenerateShadowMap = function () {
       gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.Meshes[j].ibo);
-      gl.drawElements(
-        gl.TRIANGLES,
-        this.Meshes[j].nPoints,
-        gl.UNSIGNED_SHORT,
-        0
-      );
+      if (j != 3 && renderMode == "wireframe") {
+        gl.drawElements(
+          gl.LINES,
+          this.Meshes[j].nPoints,
+          gl.UNSIGNED_SHORT,
+          0
+        );
+      } else {
+        gl.drawElements(
+          gl.TRIANGLES,
+          this.Meshes[j].nPoints,
+          gl.UNSIGNED_SHORT,
+          0
+        );
+      }
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
     }
   }
@@ -1895,6 +1914,93 @@ LightMapDemoScene.prototype._GenerateShadowMap = function () {
 };
 
 LightMapDemoScene.prototype._Render = function () {
+  var gl = this.gl;
+
+  // Clear back buffer, set per-frame uniforms
+  gl.enable(gl.CULL_FACE);
+  gl.enable(gl.DEPTH_TEST);
+
+  gl.viewport(0, 0, gl.canvas.clientWidth, gl.canvas.clientHeight);
+
+  gl.clearColor(0, 0, 0, 1);
+  gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
+
+  gl.useProgram(this.ShadowProgram);
+  gl.uniformMatrix4fv(
+    this.ShadowProgram.uniforms.mProj,
+    gl.FALSE,
+    this.projMatrix
+  );
+  gl.uniformMatrix4fv(
+    this.ShadowProgram.uniforms.mView,
+    gl.FALSE,
+    this.viewMatrix
+  );
+  gl.uniform3fv(
+    this.ShadowProgram.uniforms.pointLightPosition,
+    this.lightPosition
+  );
+  gl.uniform2fv(
+    this.ShadowProgram.uniforms.shadowClipNearFar,
+    this.shadowClipNearFar
+  );
+  if (this.floatExtension && this.floatLinearExtension) {
+    gl.uniform1f(this.ShadowProgram.uniforms.bias, 0.0001);
+  } else {
+    gl.uniform1f(this.ShadowProgram.uniforms.bias, 0.003);
+  }
+  gl.uniform1i(this.ShadowProgram.uniforms.lightShadowMap, 0);
+  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(gl.TEXTURE_CUBE_MAP, this.shadowMapCube);
+
+  // Draw meshes
+  for (var i = 0; i < this.Meshes.length; i++) {
+    // Per object uniforms
+    gl.uniformMatrix4fv(
+      this.ShadowProgram.uniforms.mWorld,
+      gl.FALSE,
+      this.Meshes[i].world
+    );
+    gl.uniform4fv(this.ShadowProgram.uniforms.meshColor, this.Meshes[i].color);
+
+    // Set attributes
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.Meshes[i].vbo);
+    gl.vertexAttribPointer(
+      this.ShadowProgram.attribs.vPos,
+      3,
+      gl.FLOAT,
+      gl.FALSE,
+      0,
+      0
+    );
+    gl.enableVertexAttribArray(this.ShadowProgram.attribs.vPos);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.Meshes[i].nbo);
+    gl.vertexAttribPointer(
+      this.ShadowProgram.attribs.vNorm,
+      3,
+      gl.FLOAT,
+      gl.FALSE,
+      0,
+      0
+    );
+    gl.enableVertexAttribArray(this.ShadowProgram.attribs.vNorm);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.Meshes[i].ibo);
+    if (i != 3 && renderMode == 'wireframe') {
+      // console.log(this.Meshes[i])
+      gl.drawElements(gl.LINES, this.Meshes[i].nPoints, gl.UNSIGNED_SHORT, 0);
+    } else {
+      gl.drawElements(gl.TRIANGLES, this.Meshes[i].nPoints, gl.UNSIGNED_SHORT, 0);
+    }
+    // console.log(this.Meshes);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+  }
+};
+
+LightMapDemoScene.prototype._RenderWireframe = function () {
   var gl = this.gl;
 
   // Clear back buffer, set per-frame uniforms
