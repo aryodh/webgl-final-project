@@ -1,8 +1,15 @@
 "use strict";
 
+// const { vec3 } = require("gl-matrix");
+
+// const { vec3 } = require("gl-matrix");
+
 // const { mat4 } = require("gl-matrix");
 
 // Array flattening trick from http://stackoverflow.com/questions/10865025/merge-flatten-a-multidimensional-array-in-javascript
+
+var freeLook = true;
+var freeCamera = vec3.fromValues(-5, 1, -1);
 
 var LightMapDemoScene = function (gl) {
   this.gl = gl;
@@ -591,6 +598,7 @@ LightMapDemoScene.prototype.Load = function (cb) {
     Left: false,
     Forward: false,
     Back: false,
+    ChangeCamera: false,
 
     RotLeft: false,
     RotRight: false,
@@ -653,7 +661,7 @@ LightMapDemoScene.prototype.Unload = function () {
 };
 
 LightMapDemoScene.prototype.Begin = function () {
-  console.log("Beginning demo scene");
+  //console.log("Beginning demo scene");
 
   var me = this;
 
@@ -703,6 +711,8 @@ LightMapDemoScene.prototype.End = function () {
 //
 
 var WalleTorsoLoc = vec3.fromValues(1.2409, 0.561914, 2.8015);
+var WalleHeadLoc = vec3.fromValues(1.05582, 1.30675, 2.5989);
+var camAwal = vec3.fromValues(1.05582, 1.7, 2.5989);
 var WalleRightUpperArmLoc = vec3.fromValues(1.49657, 0.840917, 2.53671);
 var WalleLeftUpperArmLoc = vec3.fromValues(0.951443, 0.822344, 3.05589);
 var WalleRightLowerArmLoc = vec3.fromValues(1.55465, 0.751237, 1.97304);
@@ -725,6 +735,7 @@ var wLUATheta = 0;
 var wRLATheta = 0;
 var wLLATheta = 0;
 var wHeadTheta = 0;
+var camWallTheta = Math.PI;
 
 var bTorsoTheta = 0;
 var bRHTheta = 0;
@@ -751,9 +762,12 @@ LightMapDemoScene.prototype.initNodes = function (
       var firstmat = mat4.create();
       mat4.copy(firstmat, this.WalleTorsoMesh.world);
       var tempmat = mat4.create();
-      var testmat = mat4.create();
-      mat4.copy(testmat, this.WalleTorsoMesh.world);
-      // console.log(this.WalleTorsoMesh.world);
+      //console.log(this.WalleTorsoMesh.world);
+
+      //console.log(freeLook);
+      // if (!freeLook) {
+      //   this.camera.rotateRight(theta * (Math.PI/180));
+      // }
 
       // mat4.rotate(m, m, theta);
       mat4.translate(
@@ -761,14 +775,8 @@ LightMapDemoScene.prototype.initNodes = function (
         this.WalleTorsoMesh.world,
         vector
       );
-      mat4.translate(testmat, testmat, vector);
 
       mat4.copy(tempmat, this.WalleTorsoMesh.world);
-
-      mat4.rotateY(firstmat, firstmat, theta * (Math.PI / 180));
-      mat4.getRotation(rotationQuat, firstmat);
-      mat4.fromQuat(rotationMat, rotationQuat);
-      mat4.rotateY(testmat, testmat, (theta * Math.PI) / 180);
 
       mat4.rotateY(this.WalleTorsoMesh.world, tempmat, theta * (Math.PI / 180));
       mat4.rotateY(
@@ -808,14 +816,6 @@ LightMapDemoScene.prototype.initNodes = function (
         this.WalleTorsoMesh.world,
         resetvector
       );
-
-      mat4.translate(testmat, testmat, resetvector);
-
-      console.log("----");
-      console.log(firstmat);
-      console.log(testmat);
-      console.log(this.WalleTorsoMesh.world);
-      console.log("----");
 
       mat4.translate(
         this.WalleLeftUpperArmMesh.world,
@@ -878,15 +878,16 @@ LightMapDemoScene.prototype.initNodes = function (
 
       mat4.copy(tempmat, this.WalleLeftUpperArmMesh.world);
 
-      mat4.rotateY(firstmat, firstmat, theta * (Math.PI / 180));
-      mat4.getRotation(rotationQuat, firstmat);
-      mat4.fromQuat(rotationMat, rotationQuat);
-
-      mat4.multiply(this.WalleLeftUpperArmMesh.world, tempmat, rotationMat);
-
-      //reset translate ke titik awal
-
-      mat4.multiply(this.WalleLeftLowerArmMesh.world, tempmat, rotationMat);
+      mat4.rotateY(
+        this.WalleLeftUpperArmMesh.world,
+        tempmat,
+        theta * (Math.PI / 180)
+      );
+      mat4.rotateY(
+        this.WalleLeftLowerArmMesh.world,
+        tempmat,
+        theta * (Math.PI / 180)
+      );
       //reset translate ke titik awal
       mat4.translate(
         this.WalleLeftUpperArmMesh.world,
@@ -905,8 +906,8 @@ LightMapDemoScene.prototype.initNodes = function (
         vector,
         theta * (Math.PI / 180)
       );
-      console.log(theta);
-      console.log(WalleLeftUpperArmLoc);
+      //console.log(theta);
+      //console.log(WalleLeftUpperArmLoc);
 
       //child
       // this.initNodes("WalleLeftLowerArmMesh", theta, vector);
@@ -927,12 +928,11 @@ LightMapDemoScene.prototype.initNodes = function (
       );
       mat4.copy(tempmat, this.WalleLeftLowerArmMesh.world);
 
-      mat4.rotateY(firstmat, firstmat, theta * (Math.PI / 180));
-      mat4.getRotation(rotationQuat, firstmat);
-      mat4.fromQuat(rotationMat, rotationQuat);
-
-      mat4.multiply(this.WalleLeftLowerArmMesh.world, tempmat, rotationMat);
-
+      mat4.rotateY(
+        this.WalleLeftLowerArmMesh.world,
+        tempmat,
+        theta * (Math.PI / 180)
+      );
       //reset translate ke titik awal
       mat4.translate(
         this.WalleLeftLowerArmMesh.world,
@@ -966,15 +966,17 @@ LightMapDemoScene.prototype.initNodes = function (
       );
       mat4.copy(tempmat, this.WalleRightUpperArmMesh.world);
 
-      mat4.rotateY(firstmat, firstmat, theta * (Math.PI / 180));
-      mat4.getRotation(rotationQuat, firstmat);
-      mat4.fromQuat(rotationMat, rotationQuat);
+      mat4.rotateY(
+        this.WalleRightUpperArmMesh.world,
+        tempmat,
+        theta * (Math.PI / 180)
+      );
 
-      mat4.multiply(this.WalleRightUpperArmMesh.world, tempmat, rotationMat);
-
-      //reset translate ke titik awal
-
-      mat4.multiply(this.WalleRightLowerArmMesh.world, tempmat, rotationMat);
+      mat4.rotateY(
+        this.WalleRightLowerArmMesh.world,
+        tempmat,
+        theta * (Math.PI / 180)
+      );
 
       //reset translate ke titik awal
       mat4.translate(
@@ -1015,11 +1017,11 @@ LightMapDemoScene.prototype.initNodes = function (
       );
       mat4.copy(tempmat, this.WalleRightLowerArmMesh.world);
 
-      mat4.rotateY(firstmat, firstmat, theta * (Math.PI / 180));
-      mat4.getRotation(rotationQuat, firstmat);
-      mat4.fromQuat(rotationMat, rotationQuat);
-
-      mat4.multiply(this.WalleRightLowerArmMesh.world, tempmat, rotationMat);
+      mat4.rotateY(
+        this.WalleRightLowerArmMesh.world,
+        tempmat,
+        theta * (Math.PI / 180)
+      );
 
       //reset translate ke titik awal
       mat4.translate(
@@ -1051,11 +1053,13 @@ LightMapDemoScene.prototype.initNodes = function (
 
       mat4.copy(tempmat, this.WalleHeadMesh.world);
 
-      mat4.rotateY(firstmat, firstmat, theta * (Math.PI / 180));
-      mat4.getRotation(rotationQuat, firstmat);
-      mat4.fromQuat(rotationMat, rotationQuat);
+      mat4.rotateY(this.WalleHeadMesh.world, tempmat, theta * (Math.PI / 180));
 
-      mat4.multiply(this.WalleHeadMesh.world, tempmat, rotationMat);
+      mat4.translate(
+        this.WalleTorsoMesh.world,
+        this.WalleTorsoMesh.world,
+        resetvector
+      );
 
       //reset translate ke titik awal
       mat4.translate(
@@ -1079,11 +1083,11 @@ LightMapDemoScene.prototype.initNodes = function (
       );
       mat4.copy(tempmat, this.WalleLeftLegMesh.world);
 
-      mat4.rotateY(firstmat, firstmat, theta * (Math.PI / 180));
-      mat4.getRotation(rotationQuat, firstmat);
-      mat4.fromQuat(rotationMat, rotationQuat);
-
-      mat4.multiply(this.WalleLeftLegMesh.world, tempmat, rotationMat);
+      mat4.rotateY(
+        this.WalleLeftLegMesh.world,
+        tempmat,
+        theta * (Math.PI / 180)
+      );
 
       //reset translate ke titik awal
       mat4.translate(
@@ -1112,11 +1116,12 @@ LightMapDemoScene.prototype.initNodes = function (
       );
       mat4.copy(tempmat, this.WalleRightLegMesh.world);
 
-      mat4.rotateY(firstmat, firstmat, theta * (Math.PI / 180));
-      mat4.getRotation(rotationQuat, firstmat);
-      mat4.fromQuat(rotationMat, rotationQuat);
+      mat4.rotateY(
+        this.WalleRightLegMesh.world,
+        tempmat,
+        theta * (Math.PI / 180)
+      );
 
-      mat4.multiply(this.WalleRightLegMesh.world, tempmat, rotationMat);
       //reset translate ke titik awal
       mat4.translate(
         this.WalleRightLegMesh.world,
@@ -1135,6 +1140,13 @@ LightMapDemoScene.prototype.initNodes = function (
       if (vector === null) {
         vector = vec3.fromValues(0.1, 0, 0);
       }
+      if (!freeLook) {
+        this.camera.moveWallE(vector);
+      } else {
+        vec3.add(camAwal, camAwal, vector);
+      }
+      console.log(freeLook);
+
       vec3.scale(resetvector, vector, -1);
       // mat4.rotate(m, m, theta);
       mat4.translate(
@@ -1189,6 +1201,11 @@ LightMapDemoScene.prototype.initNodes = function (
       if (vector === null) {
         vector = vec3.fromValues(-0.1, 0, 0);
       }
+      if (!freeLook) {
+        this.camera.moveWallE(vector);
+      } else {
+        vec3.add(camAwal, camAwal, vector);
+      }
       vec3.scale(resetvector, vector, -1);
       // mat4.rotate(m, m, theta);
       mat4.translate(
@@ -1242,6 +1259,11 @@ LightMapDemoScene.prototype.initNodes = function (
       if (vector === null) {
         vector = vec3.fromValues(0, 0, 0.1);
       }
+      if (!freeLook) {
+        this.camera.moveWallE(vector);
+      } else {
+        vec3.add(camAwal, camAwal, vector);
+      }
       vec3.scale(resetvector, vector, -1);
       // mat4.rotate(m, m, theta);
       mat4.translate(
@@ -1294,6 +1316,11 @@ LightMapDemoScene.prototype.initNodes = function (
     case "WalleMoveLeft":
       if (vector === null) {
         vector = vec3.fromValues(0, 0, -0.1);
+      }
+      if (!freeLook) {
+        this.camera.moveWallE(vector);
+      } else {
+        vec3.add(camAwal, camAwal, vector);
       }
       vec3.scale(resetvector, vector, -1);
       // mat4.rotate(m, m, theta);
@@ -1357,13 +1384,17 @@ LightMapDemoScene.prototype.initNodes = function (
       );
       mat4.copy(tempmat, this.BoxiTorsoMesh.world);
 
-      mat4.rotateY(firstmat, firstmat, theta * (Math.PI / 180));
-      mat4.getRotation(rotationQuat, firstmat);
-      mat4.fromQuat(rotationMat, rotationQuat);
-
-      mat4.multiply(this.BoxiTorsoMesh.world, tempmat, rotationMat);
-      mat4.multiply(this.BoxiRightHandMesh.world, tempmat, rotationMat);
-      mat4.multiply(this.BoxiLeftHandMesh.world, tempmat, rotationMat);
+      mat4.rotateY(this.BoxiTorsoMesh.world, tempmat, theta * (Math.PI / 180));
+      mat4.rotateY(
+        this.BoxiRightHandMesh.world,
+        tempmat,
+        theta * (Math.PI / 180)
+      );
+      mat4.rotateY(
+        this.BoxiLeftHandMesh.world,
+        tempmat,
+        theta * (Math.PI / 180)
+      );
 
       //reset translate ke titik awal
       mat4.translate(
@@ -1401,11 +1432,11 @@ LightMapDemoScene.prototype.initNodes = function (
       );
       mat4.copy(tempmat, this.BoxiRightHandMesh.world);
 
-      mat4.rotateZ(firstmat, firstmat, theta * (Math.PI / 180));
-      mat4.getRotation(rotationQuat, firstmat);
-      mat4.fromQuat(rotationMat, rotationQuat);
-
-      mat4.multiply(this.BoxiRightHandMesh.world, tempmat, rotationMat);
+      mat4.rotateZ(
+        this.BoxiRightHandMesh.world,
+        tempmat,
+        theta * (Math.PI / 180)
+      );
 
       //reset translate ke titik awal
       mat4.translate(
@@ -1435,11 +1466,11 @@ LightMapDemoScene.prototype.initNodes = function (
       );
       mat4.copy(tempmat, this.BoxiLeftHandMesh.world);
 
-      mat4.rotateZ(firstmat, firstmat, theta * (Math.PI / 180));
-      mat4.getRotation(rotationQuat, firstmat);
-      mat4.fromQuat(rotationMat, rotationQuat);
-
-      mat4.multiply(this.BoxiLeftHandMesh.world, tempmat, rotationMat);
+      mat4.rotateZ(
+        this.BoxiLeftHandMesh.world,
+        tempmat,
+        theta * (Math.PI / 180)
+      );
 
       //reset translate ke titik awal
       mat4.translate(
@@ -1469,13 +1500,21 @@ LightMapDemoScene.prototype.initNodes = function (
       );
       mat4.copy(tempmat, this.PocongTorsoMesh.world);
 
-      mat4.rotateY(firstmat, firstmat, theta * (Math.PI / 180));
-      mat4.getRotation(rotationQuat, firstmat);
-      mat4.fromQuat(rotationMat, rotationQuat);
-
-      mat4.multiply(this.PocongTorsoMesh.world, tempmat, rotationMat);
-      mat4.multiply(this.PocongRightHandMesh.world, tempmat, rotationMat);
-      mat4.multiply(this.PocongLeftHandMesh.world, tempmat, rotationMat);
+      mat4.rotateY(
+        this.PocongTorsoMesh.world,
+        tempmat,
+        theta * (Math.PI / 180)
+      );
+      mat4.rotateY(
+        this.PocongRightHandMesh.world,
+        tempmat,
+        theta * (Math.PI / 180)
+      );
+      mat4.rotateY(
+        this.PocongLeftHandMesh.world,
+        tempmat,
+        theta * (Math.PI / 180)
+      );
 
       //reset translate ke titik awal
       mat4.translate(
@@ -1518,11 +1557,11 @@ LightMapDemoScene.prototype.initNodes = function (
       );
       mat4.copy(tempmat, this.PocongRightHandMesh.world);
 
-      mat4.rotateZ(firstmat, firstmat, theta * (Math.PI / 180));
-      mat4.getRotation(rotationQuat, firstmat);
-      mat4.fromQuat(rotationMat, rotationQuat);
-
-      mat4.multiply(this.PocongRightHandMesh.world, tempmat, rotationMat);
+      mat4.rotateZ(
+        this.PocongRightHandMesh.world,
+        tempmat,
+        theta * (Math.PI / 180)
+      );
 
       //reset translate ke titik awal
       mat4.translate(
@@ -1552,11 +1591,11 @@ LightMapDemoScene.prototype.initNodes = function (
       );
       mat4.copy(tempmat, this.PocongLeftHandMesh.world);
 
-      mat4.rotateZ(firstmat, firstmat, theta * (Math.PI / 180));
-      mat4.getRotation(rotationQuat, firstmat);
-      mat4.fromQuat(rotationMat, rotationQuat);
-
-      mat4.multiply(this.PocongLeftHandMesh.world, tempmat, rotationMat);
+      mat4.rotateZ(
+        this.PocongLeftHandMesh.world,
+        tempmat,
+        theta * (Math.PI / 180)
+      );
 
       //reset translate ke titik awal
       mat4.translate(
@@ -1587,6 +1626,8 @@ LightMapDemoScene.prototype._Update = function (dt) {
     document.getElementById("walleTorso").value = event.target.value;
     var rotTheta = event.target.value - wTorsoTheta;
     wTorsoTheta = event.target.value;
+    console.log(rotTheta);
+    camWallTheta += rotTheta * (180 / Math.PI);
     me.initNodes("WalleTorsoMesh", rotTheta);
   };
   document.getElementById("walleRightUpperArm").onchange = function (event) {
@@ -1666,36 +1707,62 @@ LightMapDemoScene.prototype._Update = function (dt) {
     me.initNodes("PocongLeftHandMesh", rotTheta, null);
   };
 
-  if (this.PressedKeys.Forward && !this.PressedKeys.Back) {
-    this.camera.moveForward((dt / 1000) * this.MoveForwardSpeed);
+  if (this.PressedKeys.ChangeCamera) {
+    // var tujuanKamera = vec3.create();
+    // vec3.rotateY(tujuanKamera, )
+    if (freeLook) {
+      console.log("masuk");
+      this.camera.moveToWallE(camAwal, camWallTheta);
+    } else {
+      this.camera.moveToWallE(freeCamera, Math.PI);
+    }
   }
+  if (freeLook) {
+    if (this.PressedKeys.Forward && !this.PressedKeys.Back) {
+      this.camera.moveForward((dt / 1000) * this.MoveForwardSpeed);
+    }
+    if (this.PressedKeys.Back && !this.PressedKeys.Forward) {
+      this.camera.moveForward((-dt / 1000) * this.MoveForwardSpeed);
+    }
 
-  if (this.PressedKeys.Back && !this.PressedKeys.Forward) {
-    this.camera.moveForward((-dt / 1000) * this.MoveForwardSpeed);
-  }
+    if (this.PressedKeys.Right && !this.PressedKeys.Left) {
+      this.camera.moveRight((dt / 1000) * this.MoveForwardSpeed);
+    }
 
-  if (this.PressedKeys.Right && !this.PressedKeys.Left) {
-    this.camera.moveRight((dt / 1000) * this.MoveForwardSpeed);
-  }
+    if (this.PressedKeys.Left && !this.PressedKeys.Right) {
+      this.camera.moveRight((-dt / 1000) * this.MoveForwardSpeed);
+    }
 
-  if (this.PressedKeys.Left && !this.PressedKeys.Right) {
-    this.camera.moveRight((-dt / 1000) * this.MoveForwardSpeed);
-  }
+    if (this.PressedKeys.Up && !this.PressedKeys.Down) {
+      this.camera.moveUp((dt / 1000) * this.MoveForwardSpeed);
+    }
 
-  if (this.PressedKeys.Up && !this.PressedKeys.Down) {
-    this.camera.moveUp((dt / 1000) * this.MoveForwardSpeed);
-  }
-
-  if (this.PressedKeys.Down && !this.PressedKeys.Up) {
-    this.camera.moveUp((-dt / 1000) * this.MoveForwardSpeed);
+    if (this.PressedKeys.Down && !this.PressedKeys.Up) {
+      this.camera.moveUp((-dt / 1000) * this.MoveForwardSpeed);
+    }
   }
 
   if (this.PressedKeys.RotRight && !this.PressedKeys.RotLeft) {
-    this.camera.rotateRight((-dt / 1000) * this.RotateSpeed);
+    if (freeLook) {
+      this.camera.rotateRight((-dt / 1000) * this.RotateSpeed);
+      camWallTheta -= (-dt / 1000) * this.RotateSpeed * (180 / Math.PI);
+    } else {
+      this.camera.rotateRight((-dt / 1000) * this.RotateSpeed);
+      console.log((-dt / 1000) * this.RotateSpeed);
+      me.initNodes(
+        "WalleTorsoMesh",
+        (-dt / 1000) * this.RotateSpeed * (180 / Math.PI)
+      );
+    }
   }
 
   if (this.PressedKeys.RotLeft && !this.PressedKeys.RotRight) {
-    this.camera.rotateRight((dt / 1000) * this.RotateSpeed);
+    if (freeLook) {
+      this.camera.rotateRight((dt / 1000) * this.RotateSpeed);
+    } else {
+      this.camera.rotateRight((dt / 1000) * this.RotateSpeed);
+      me.initNodes("WalleTorsoMesh", (dt / 1000) * this.RotateSpeed);
+    }
   }
 
   if (this.PressedKeys.WalleForward && !this.PressedKeys.WalleBack) {
@@ -1930,6 +1997,9 @@ LightMapDemoScene.prototype._OnResizeWindow = function () {
 
 LightMapDemoScene.prototype._OnKeyDown = function (e) {
   switch (e.code) {
+    case "KeyN":
+      this.PressedKeys.ChangeCamera = true;
+      break;
     case "KeyW":
       this.PressedKeys.Forward = true;
       break;
@@ -1971,6 +2041,14 @@ LightMapDemoScene.prototype._OnKeyDown = function (e) {
 
 LightMapDemoScene.prototype._OnKeyUp = function (e) {
   switch (e.code) {
+    case "KeyN":
+      if (freeLook) {
+        freeLook = false;
+      } else {
+        freeLook = true;
+      }
+      this.PressedKeys.ChangeCamera = false;
+      break;
     case "KeyW":
       this.PressedKeys.Forward = false;
       break;
