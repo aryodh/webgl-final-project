@@ -658,7 +658,7 @@ LightMapDemoScene.prototype.Unload = function () {
 };
 
 LightMapDemoScene.prototype.Begin = function () {
-  console.log("Beginning demo scene");
+  //console.log("Beginning demo scene");
 
   var me = this;
 
@@ -772,6 +772,7 @@ LightMapDemoScene.prototype.initNodes = function (
 
       mat4.copy(tempmat, this.WalleTorsoMesh.world);
 
+      console.log(theta * (Math.PI / 180));
       mat4.rotateY(firstmat, firstmat, theta * (Math.PI / 180));
       mat4.getRotation(rotationQuat, firstmat);
       mat4.fromQuat(rotationMat, rotationQuat);
@@ -881,8 +882,8 @@ LightMapDemoScene.prototype.initNodes = function (
         vector,
         theta * (Math.PI / 180)
       );
-      console.log(theta);
-      console.log(WalleLeftUpperArmLoc);
+      //console.log(theta);
+      //console.log(WalleLeftUpperArmLoc);
 
       //child
       // this.initNodes("WalleLeftLowerArmMesh", theta, vector);
@@ -1547,6 +1548,7 @@ LightMapDemoScene.prototype._Update = function (dt) {
     var rotTheta = event.target.value - wTorsoTheta;
     wTorsoTheta = event.target.value;
     console.log(rotTheta);
+    camWallTheta += (rotTheta * (180 / Math.PI));
     me.initNodes("WalleTorsoMesh", rotTheta);
   };
   document.getElementById("walleRightUpperArm").onchange = function (event) {
@@ -1633,7 +1635,8 @@ LightMapDemoScene.prototype._Update = function (dt) {
   if (this.PressedKeys.ChangeCamera) {
     // var tujuanKamera = vec3.create();
     // vec3.rotateY(tujuanKamera, )
-    this.camera.moveToWallE(WalleHeadLoc, Math.PI);
+    console.log(camWallTheta);
+    this.camera.moveToWallE(WalleHeadLoc, camWallTheta);
   }
 
   if (this.PressedKeys.Back && !this.PressedKeys.Forward) {
@@ -1662,6 +1665,7 @@ LightMapDemoScene.prototype._Update = function (dt) {
     }
     else {
       this.camera.rotateRight((-dt / 1000) * this.RotateSpeed);
+      console.log((-dt / 1000) * this.RotateSpeed);
       me.initNodes("WalleTorsoMesh", ((-dt / 1000) * this.RotateSpeed) * (180/Math.PI));
     }
   }
