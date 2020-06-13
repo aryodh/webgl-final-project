@@ -88,7 +88,7 @@ LightMapDemoScene.prototype.Load = function (cb) {
             );
             break;
           case "LightBulbMesh":
-            me.lightPosition = vec3.fromValues(0, 0, 0);
+            me.lightPosition = vec3.fromValues(0, 5.0, 0);
             me.LightBulbMesh = new Model(
               me.gl,
               mesh.vertices,
@@ -1917,7 +1917,7 @@ LightMapDemoScene.prototype._Update = function (dt) {
   if (this.PressedKeys.RotRight && !this.PressedKeys.RotLeft) {
     if (freeLook) {
       this.camera.rotateRight((-dt / 1000) * this.RotateSpeed);
-      camWallTheta += (-dt / 1000) * this.RotateSpeed * (180 / Math.PI);
+      camWallTheta -= (-dt / 1000) * this.RotateSpeed * (180 / Math.PI);
     } else {
       this.camera.rotateRight((-dt / 1000) * this.RotateSpeed);
       console.log((-dt / 1000) * this.RotateSpeed);
@@ -1931,7 +1931,7 @@ LightMapDemoScene.prototype._Update = function (dt) {
   if (this.PressedKeys.RotLeft && !this.PressedKeys.RotRight) {
     if (freeLook) {
       this.camera.rotateRight((dt / 1000) * this.RotateSpeed);
-      camWallTheta += (dt / 1000) * this.RotateSpeed * (180 / Math.PI);
+      camWallTheta -= (dt / 1000) * this.RotateSpeed * (180 / Math.PI);
     } else {
       this.camera.rotateRight((dt / 1000) * this.RotateSpeed);
       console.log((dt / 1000) * this.RotateSpeed);
