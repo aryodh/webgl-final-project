@@ -60,7 +60,6 @@ LightMapDemoScene.prototype.Load = function (cb) {
       console.log(loadResults.Models.RoomModel.meshes.length);
       for (var i = 0; i < loadResults.Models.RoomModel.meshes.length; i++) {
         var mesh = loadResults.Models.RoomModel.meshes[i];
-        console.log(mesh.name, i);
         switch (mesh.name) {
           case "ChairMesh":
             me.ChairMesh = new Model(
@@ -88,7 +87,7 @@ LightMapDemoScene.prototype.Load = function (cb) {
             );
             break;
           case "LightBulbMesh":
-            me.lightPosition = vec3.fromValues(0, 5.0, 0);
+            me.lightPosition = vec3.fromValues(0, 0.0, 0);
             me.LightBulbMesh = new Model(
               me.gl,
               mesh.vertices,
@@ -239,6 +238,7 @@ LightMapDemoScene.prototype.Load = function (cb) {
             break;
         }
       }
+      console.log(loadResults.Models.RoomModel.meshes);
 
       if (!me.ChairMesh) {
         cb("Failed to load chair mesh");
@@ -533,7 +533,7 @@ LightMapDemoScene.prototype.Load = function (cb) {
         0.35,
         85.0
       );
-
+      
       me.shadowMapCameras = [
         // Positive X
         new Camera(
@@ -1791,7 +1791,6 @@ LightMapDemoScene.prototype._Update = function (dt) {
 
   document.getElementById("objectSelector").onchange = function (event) {
     objectSelected = event.target.value;
-    console.log(objectSelected);
   };
 
   document.getElementById("walleTorso").onchange = function (event) {
@@ -1991,6 +1990,8 @@ LightMapDemoScene.prototype._GenerateShadowMap = function () {
     this.ShadowMapGenProgram.uniforms.shadowClipNearFar,
     this.shadowClipNearFar
   );
+  // console.log(this.ShadowMapGenProgram.uniforms.pointLightPosition);
+  this.lightPosition[1] += 3;
   gl.uniform3fv(
     this.ShadowMapGenProgram.uniforms.pointLightPosition,
     this.lightPosition
@@ -2051,7 +2052,7 @@ LightMapDemoScene.prototype._GenerateShadowMap = function () {
       gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.Meshes[j].ibo);
-      if (j != 3 && renderMode == "wireframe") {
+      if (j != 3 && j != 2 && renderMode == "wireframe") {
         gl.drawElements(gl.LINES, this.Meshes[j].nPoints, gl.UNSIGNED_SHORT, 0);
       } else {
         gl.drawElements(
@@ -2093,6 +2094,7 @@ LightMapDemoScene.prototype._Render = function () {
     gl.FALSE,
     this.viewMatrix
   );
+  
   gl.uniform3fv(
     this.ShadowProgram.uniforms.pointLightPosition,
     this.lightPosition
