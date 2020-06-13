@@ -757,7 +757,6 @@ LightMapDemoScene.prototype.initNodes = function (
   var resetvector = vec3.fromValues(0, 0, 0);
   var rotationMat = mat4.create();
   var rotationQuat = quat.create();
-  console.log(theta);
   switch (meshname) {
     case "WalleTorsoMesh":
       vector = WalleTorsoLoc;
@@ -1753,6 +1752,8 @@ LightMapDemoScene.prototype.initNodes = function (
   }
 };
 
+var demoFlag = true;
+var thetaChangeSinceDemo = 0;
 LightMapDemoScene.prototype._Update = function (dt) {
   //   mat4.rotateZ(
   //     this.MonkeyMesh.world,
@@ -1766,6 +1767,21 @@ LightMapDemoScene.prototype._Update = function (dt) {
       renderMode = "wireframe";
     } else {
       renderMode = "shade";
+    }
+  };
+
+  if (demoFlag) {
+    this.initNodes("WalleTorsoMesh", (dt / 1000) * 2 * Math.PI);
+    thetaChangeSinceDemo += (dt / 1000) * 2 * Math.PI;
+  }
+
+  document.getElementById("demo").onchange = function (event) {
+    if (demoFlag) {
+      demoFlag = false;
+      me.initNodes("WalleTorsoMesh", -thetaChangeSinceDemo);
+      thetaChangeSinceDemo = 0;
+    } else {
+      demoFlag = true;
     }
   };
 
@@ -2032,12 +2048,7 @@ LightMapDemoScene.prototype._GenerateShadowMap = function () {
 
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.Meshes[j].ibo);
       if (j != 3 && renderMode == "wireframe") {
-        gl.drawElements(
-          gl.LINES,
-          this.Meshes[j].nPoints,
-          gl.UNSIGNED_SHORT,
-          0
-        );
+        gl.drawElements(gl.LINES, this.Meshes[j].nPoints, gl.UNSIGNED_SHORT, 0);
       } else {
         gl.drawElements(
           gl.TRIANGLES,
@@ -2131,11 +2142,16 @@ LightMapDemoScene.prototype._Render = function () {
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.Meshes[i].ibo);
-    if (i != 3 && renderMode == 'wireframe') {
+    if (i != 3 && renderMode == "wireframe") {
       // console.log(this.Meshes[i])
       gl.drawElements(gl.LINES, this.Meshes[i].nPoints, gl.UNSIGNED_SHORT, 0);
     } else {
-      gl.drawElements(gl.TRIANGLES, this.Meshes[i].nPoints, gl.UNSIGNED_SHORT, 0);
+      gl.drawElements(
+        gl.TRIANGLES,
+        this.Meshes[i].nPoints,
+        gl.UNSIGNED_SHORT,
+        0
+      );
     }
     // console.log(this.Meshes);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
