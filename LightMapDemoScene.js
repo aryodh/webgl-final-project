@@ -1772,6 +1772,8 @@ LightMapDemoScene.prototype._Update = function (dt) {
 
   if (demoFlag) {
     this.initNodes("WalleTorsoMesh", (dt / 1000) * 2 * Math.PI);
+    this.initNodes("BoxiTorsoMesh", (dt / 1000) * 2 * Math.PI);
+    this.initNodes("PocongTorsoMesh", (dt / 1000) * 2 * Math.PI);
     thetaChangeSinceDemo += (dt / 1000) * 2 * Math.PI;
   }
 
@@ -1779,6 +1781,8 @@ LightMapDemoScene.prototype._Update = function (dt) {
     if (demoFlag) {
       demoFlag = false;
       me.initNodes("WalleTorsoMesh", -thetaChangeSinceDemo);
+      me.initNodes("BoxiTorsoMesh", -thetaChangeSinceDemo);
+      me.initNodes("PocongTorsoMesh", -thetaChangeSinceDemo);
       thetaChangeSinceDemo = 0;
     } else {
       demoFlag = true;
