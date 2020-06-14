@@ -2052,15 +2052,35 @@ LightMapDemoScene.prototype._GenerateShadowMap = function () {
 
       // Set attributes
       gl.bindBuffer(gl.ARRAY_BUFFER, this.Meshes[j].vbo);
-      gl.vertexAttribPointer(
-        this.ShadowMapGenProgram.attribs.vPos,
-        3,
-        gl.FLOAT,
-        gl.FALSE,
-        0,
-        0
-      );
+      if (j === 11) {
+        gl.vertexAttribPointer(
+          this.ShadowMapGenProgram.attribs.vPos,
+          3,
+          gl.FLOAT,
+          gl.FALSE,
+          5 * Float32Array.BYTES_PER_ELEMENT,
+          0
+        );
+      } else {
+        gl.vertexAttribPointer(
+          this.ShadowMapGenProgram.attribs.vPos,
+          3,
+          gl.FLOAT,
+          gl.FALSE,
+          0,
+          0
+        );
+      }
       gl.enableVertexAttribArray(this.ShadowMapGenProgram.attribs.vPos);
+      // gl.vertexAttribPointer(
+      //   this.ShadowMapGenProgram.attribs.vPos,
+      //   3,
+      //   gl.FLOAT,
+      //   gl.FALSE,
+      //   0,
+      //   0
+      // );
+      // gl.enableVertexAttribArray(this.ShadowMapGenProgram.attribs.vPos);
 
       gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
@@ -2186,9 +2206,9 @@ LightMapDemoScene.prototype._Render = function () {
   gl.activeTexture(gl.TEXTURE0);
   gl.bindTexture(gl.TEXTURE_CUBE_MAP, this.shadowMapCube);
 
+  gl.uniform1i(this.ShadowProgram.uniforms.sampler, 1);
   gl.activeTexture(gl.TEXTURE1);
   gl.bindTexture(gl.TEXTURE_2D, this.walleTexture[0]);
-  gl.uniform1i(this.ShadowProgram.uniforms.sampler, 1);
 
   // Draw meshes
   for (var i = 0; i < this.Meshes.length; i++) {
@@ -2202,7 +2222,7 @@ LightMapDemoScene.prototype._Render = function () {
 
     // Set attributes
     gl.bindBuffer(gl.ARRAY_BUFFER, this.Meshes[i].vbo);
-    if (i === 3) {
+    if (i === 11) {
       gl.vertexAttribPointer(
         this.ShadowProgram.attribs.vPos,
         3,
@@ -2224,38 +2244,27 @@ LightMapDemoScene.prototype._Render = function () {
     gl.enableVertexAttribArray(this.ShadowProgram.attribs.vPos);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.Meshes[i].nbo);
-    gl.vertexAttribPointer(
-      this.ShadowProgram.attribs.vNorm,
-      3,
-      gl.FLOAT,
-      gl.FALSE,
-      0,
-      0
-    );
-    gl.enableVertexAttribArray(this.ShadowProgram.attribs.vNorm);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.Meshes[i].nbo);
-    if (i === 3) {
+    if (i === 11) {
       gl.vertexAttribPointer(
         this.ShadowProgram.attribs.vertTexCoord,
-        3,
+        2,
         gl.FLOAT,
         gl.FALSE,
         5 * Float32Array.BYTES_PER_ELEMENT,
         3 * Float32Array.BYTES_PER_ELEMENT
       );
+      gl.enableVertexAttribArray(this.ShadowProgram.attribs.vertTexCoord);
     } else {
       gl.vertexAttribPointer(
-        this.ShadowProgram.attribs.vertTexCoord,
+        this.ShadowProgram.attribs.vNorm,
         3,
         gl.FLOAT,
         gl.FALSE,
         0,
         0
       );
+      gl.enableVertexAttribArray(this.ShadowProgram.attribs.vNorm);
     }
-   
-    gl.enableVertexAttribArray(this.ShadowProgram.attribs.vertTexCoord);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
