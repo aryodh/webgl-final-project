@@ -379,10 +379,15 @@ LightMapDemoScene.prototype.Load = function (cb) {
           "pointLightPosition"
         ),
         meshColor: me.gl.getUniformLocation(me.NoShadowProgram, "meshColor"),
+        sampler: me.gl.getUniformLocation(me.NoShadowProgram, "sampler"),
       };
       me.NoShadowProgram.attribs = {
         vPos: me.gl.getAttribLocation(me.NoShadowProgram, "vPos"),
         vNorm: me.gl.getAttribLocation(me.NoShadowProgram, "vNorm"),
+        vertTexCoord: me.gl.getAttribLocation(
+          me.NoShadowProgram,
+          "vertTexCoord"
+        ),
       };
 
       me.ShadowProgram.uniforms = {
@@ -405,10 +410,15 @@ LightMapDemoScene.prototype.Load = function (cb) {
         ),
 
         bias: me.gl.getUniformLocation(me.ShadowProgram, "bias"),
+        sampler: me.gl.getUniformLocation(me.ShadowProgram, "sampler"),
       };
       me.ShadowProgram.attribs = {
         vPos: me.gl.getAttribLocation(me.ShadowProgram, "vPos"),
         vNorm: me.gl.getAttribLocation(me.ShadowProgram, "vNorm"),
+        vertTexCoord: me.gl.getAttribLocation(
+          me.NoShadowProgram,
+          "vertTexCoord"
+        ),
       };
 
       me.ShadowMapGenProgram.uniforms = {
@@ -2082,6 +2092,27 @@ LightMapDemoScene.prototype._Render = function () {
   gl.clearColor(0, 0, 0, 1);
   gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
 
+   //
+  // Create Texture
+  // 
+  var glTex = gl.createTexture();
+  this.walleTexture = [];
+  gl.bindTexture(gl.TEXTURE_2D, glTex);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texImage2D(
+    gl.TEXTURE_2D,
+    0,
+    gl.RGBA,
+    gl.RGBA,
+    gl.UNSIGNED_BYTE,
+    document.getElementById("walle-texture")
+  );
+  this.walleTexture.push(glTex);
+  gl.bindBuffer(gl.ARRAY_BUFFER, null);
+
   gl.useProgram(this.ShadowProgram);
   gl.uniformMatrix4fv(
     this.ShadowProgram.uniforms.mProj,
@@ -2110,6 +2141,10 @@ LightMapDemoScene.prototype._Render = function () {
   gl.activeTexture(gl.TEXTURE0);
   gl.bindTexture(gl.TEXTURE_CUBE_MAP, this.shadowMapCube);
 
+  gl.activeTexture(gl.TEXTURE1);
+  gl.bindTexture(gl.TEXTURE_2D, this.walleTexture[0]);
+  gl.uniform1i(this.ShadowProgram.uniforms.sampler, 1);
+
   // Draw meshes
   for (var i = 0; i < this.Meshes.length; i++) {
     // Per object uniforms
@@ -2122,14 +2157,25 @@ LightMapDemoScene.prototype._Render = function () {
 
     // Set attributes
     gl.bindBuffer(gl.ARRAY_BUFFER, this.Meshes[i].vbo);
-    gl.vertexAttribPointer(
-      this.ShadowProgram.attribs.vPos,
-      3,
-      gl.FLOAT,
-      gl.FALSE,
-      0,
-      0
-    );
+    if (i === 3) {
+      gl.vertexAttribPointer(
+        this.ShadowProgram.attribs.vPos,
+        3,
+        gl.FLOAT,
+        gl.FALSE,
+        5 * Float32Array.BYTES_PER_ELEMENT,
+        0
+      );
+    } else {
+      gl.vertexAttribPointer(
+        this.ShadowProgram.attribs.vPos,
+        3,
+        gl.FLOAT,
+        gl.FALSE,
+        0,
+        0
+      );
+    }
     gl.enableVertexAttribArray(this.ShadowProgram.attribs.vPos);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.Meshes[i].nbo);
@@ -2142,6 +2188,29 @@ LightMapDemoScene.prototype._Render = function () {
       0
     );
     gl.enableVertexAttribArray(this.ShadowProgram.attribs.vNorm);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.Meshes[i].nbo);
+    if (i === 3) {
+      gl.vertexAttribPointer(
+        this.ShadowProgram.attribs.vertTexCoord,
+        3,
+        gl.FLOAT,
+        gl.FALSE,
+        5 * Float32Array.BYTES_PER_ELEMENT,
+        3 * Float32Array.BYTES_PER_ELEMENT
+      );
+    } else {
+      gl.vertexAttribPointer(
+        this.ShadowProgram.attribs.vertTexCoord,
+        3,
+        gl.FLOAT,
+        gl.FALSE,
+        0,
+        0
+      );
+    }
+   
+    gl.enableVertexAttribArray(this.ShadowProgram.attribs.vertTexCoord);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
@@ -2158,87 +2227,6 @@ LightMapDemoScene.prototype._Render = function () {
       );
     }
     // console.log(this.Meshes);
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
-  }
-};
-
-LightMapDemoScene.prototype._RenderWireframe = function () {
-  var gl = this.gl;
-
-  // Clear back buffer, set per-frame uniforms
-  gl.enable(gl.CULL_FACE);
-  gl.enable(gl.DEPTH_TEST);
-
-  gl.viewport(0, 0, gl.canvas.clientWidth, gl.canvas.clientHeight);
-
-  gl.clearColor(0, 0, 0, 1);
-  gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
-
-  gl.useProgram(this.ShadowProgram);
-  gl.uniformMatrix4fv(
-    this.ShadowProgram.uniforms.mProj,
-    gl.FALSE,
-    this.projMatrix
-  );
-  gl.uniformMatrix4fv(
-    this.ShadowProgram.uniforms.mView,
-    gl.FALSE,
-    this.viewMatrix
-  );
-  gl.uniform3fv(
-    this.ShadowProgram.uniforms.pointLightPosition,
-    this.lightPosition
-  );
-  gl.uniform2fv(
-    this.ShadowProgram.uniforms.shadowClipNearFar,
-    this.shadowClipNearFar
-  );
-  if (this.floatExtension && this.floatLinearExtension) {
-    gl.uniform1f(this.ShadowProgram.uniforms.bias, 0.0001);
-  } else {
-    gl.uniform1f(this.ShadowProgram.uniforms.bias, 0.003);
-  }
-  gl.uniform1i(this.ShadowProgram.uniforms.lightShadowMap, 0);
-  gl.activeTexture(gl.TEXTURE0);
-  gl.bindTexture(gl.TEXTURE_CUBE_MAP, this.shadowMapCube);
-
-  // Draw meshes
-  for (var i = 0; i < this.Meshes.length; i++) {
-    // Per object uniforms
-    gl.uniformMatrix4fv(
-      this.ShadowProgram.uniforms.mWorld,
-      gl.FALSE,
-      this.Meshes[i].world
-    );
-    gl.uniform4fv(this.ShadowProgram.uniforms.meshColor, this.Meshes[i].color);
-
-    // Set attributes
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.Meshes[i].vbo);
-    gl.vertexAttribPointer(
-      this.ShadowProgram.attribs.vPos,
-      3,
-      gl.FLOAT,
-      gl.FALSE,
-      0,
-      0
-    );
-    gl.enableVertexAttribArray(this.ShadowProgram.attribs.vPos);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.Meshes[i].nbo);
-    gl.vertexAttribPointer(
-      this.ShadowProgram.attribs.vNorm,
-      3,
-      gl.FLOAT,
-      gl.FALSE,
-      0,
-      0
-    );
-    gl.enableVertexAttribArray(this.ShadowProgram.attribs.vNorm);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.Meshes[i].ibo);
-    gl.drawElements(gl.TRIANGLES, this.Meshes[i].nPoints, gl.UNSIGNED_SHORT, 0);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
   }
 };

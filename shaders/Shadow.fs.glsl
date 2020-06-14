@@ -8,6 +8,12 @@ uniform vec2 shadowClipNearFar;
 
 uniform float bias;
 
+// The texture.
+uniform sampler2D sampler;
+
+// Passed in from the vertex shader.
+varying vec2 fragTexCoord;
+
 varying vec3 fPos;
 varying vec3 fNorm;
 
@@ -27,5 +33,7 @@ void main()
 		lightIntensity += 0.4 * max(dot(fNorm, toLightNormal), 0.0);
 	}
 
-	gl_FragColor = vec4(meshColor.rgb * lightIntensity, meshColor.a);
+	highp vec4 texColor = texture2D(sampler, fragTexCoord);
+
+	gl_FragColor = vec4((texColor.rgb + meshColor.rgb) * lightIntensity, texColor.a + meshColor.a);
 }
