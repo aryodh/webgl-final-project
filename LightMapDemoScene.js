@@ -17,6 +17,11 @@ var LightMapDemoScene = function (gl) {
   this.gl = gl;
 };
 
+// var lightPosition = vec4(1.0, 1.0, 1.0, 0.0);
+// var lightAmbient = vec4.fromValues(0.2, 0.2, 0.2, 1.0);
+// var lightDiffuse = vec4.fromValues(1.0, 1.0, 1.0, 1.0);
+// var lightSpecular = vec4.fromValues(1.0, 1.0, 1.0, 1.0);
+
 LightMapDemoScene.prototype.Load = function (cb) {
   console.log("Loading demo scene");
 
@@ -348,7 +353,6 @@ LightMapDemoScene.prototype.Load = function (cb) {
         cb("NoShadowProgram " + me.NoShadowProgram.error);
         return;
       }
-
       me.ShadowProgram = CreateShaderProgram(
         me.gl,
         loadResults.ShaderCode.Shadow_VSText,
@@ -358,7 +362,6 @@ LightMapDemoScene.prototype.Load = function (cb) {
         cb("ShadowProgram " + me.ShadowProgram.error);
         return;
       }
-
       me.ShadowMapGenProgram = CreateShaderProgram(
         me.gl,
         loadResults.ShaderCode.ShadowMapGen_VSText,
@@ -368,12 +371,10 @@ LightMapDemoScene.prototype.Load = function (cb) {
         cb("ShadowMapGenProgram " + me.ShadowMapGenProgram.error);
         return;
       }
-
       me.NoShadowProgram.uniforms = {
         mProj: me.gl.getUniformLocation(me.NoShadowProgram, "mProj"),
         mView: me.gl.getUniformLocation(me.NoShadowProgram, "mView"),
         mWorld: me.gl.getUniformLocation(me.NoShadowProgram, "mWorld"),
-
         pointLightPosition: me.gl.getUniformLocation(
           me.NoShadowProgram,
           "pointLightPosition"
@@ -389,6 +390,10 @@ LightMapDemoScene.prototype.Load = function (cb) {
         mProj: me.gl.getUniformLocation(me.ShadowProgram, "mProj"),
         mView: me.gl.getUniformLocation(me.ShadowProgram, "mView"),
         mWorld: me.gl.getUniformLocation(me.ShadowProgram, "mWorld"),
+        // ambientProduct: me.gl.getUniformLocation(me.ShadowProgram, "ambientProduct"),
+        // diffuseProduct: me.gl.getUniformLocation(me.ShadowProgram, "diffuseProduct"),
+        // shininess: me.gl.getUniformLocation(me.ShadowProgram, "shininess"),
+        // specularProduct: me.gl.getUniformLocation(me.ShadowProgram, "specularProduct"),
 
         pointLightPosition: me.gl.getUniformLocation(
           me.ShadowProgram,
@@ -410,12 +415,10 @@ LightMapDemoScene.prototype.Load = function (cb) {
         vPos: me.gl.getAttribLocation(me.ShadowProgram, "vPos"),
         vNorm: me.gl.getAttribLocation(me.ShadowProgram, "vNorm"),
       };
-
       me.ShadowMapGenProgram.uniforms = {
         mProj: me.gl.getUniformLocation(me.ShadowMapGenProgram, "mProj"),
         mView: me.gl.getUniformLocation(me.ShadowMapGenProgram, "mView"),
         mWorld: me.gl.getUniformLocation(me.ShadowMapGenProgram, "mWorld"),
-
         pointLightPosition: me.gl.getUniformLocation(
           me.ShadowMapGenProgram,
           "pointLightPosition"
@@ -2094,6 +2097,46 @@ LightMapDemoScene.prototype._Render = function () {
     gl.FALSE,
     this.viewMatrix
   );
+
+  // var materialAmbient = vec4.create();
+  // var materialDiffuse = vec4.create();
+  // var materialSpecular = vec4.create();
+
+  // var materialAmbient = vec4.fromValues(0.24725, 0.2245, 0.0645, 1.0);
+  // var materialDiffuse = vec4.fromValues(0.34615, 0.3143, 0.0903, 1.0);
+  // var materialSpecular = vec4.fromValues(0.797357, 0.723991, 0.208006, 1.0);
+  // var materialShininess = 83.2;
+
+  // var ambientProduct = vec4.fromValues(0,0,0,0);
+  // var diffuseProduct = vec4.fromValues(0,0,0,0);
+  // var specularProduct = vec4.fromValues(0,0,0,0);
+
+  // vec4.multiply(ambientProduct, lightAmbient, materialAmbient);
+  // vec4.multiply(diffuseProduct, lightDiffuse, materialDiffuse);
+  // vec4.multiply(specularProduct, lightSpecular, materialSpecular);
+  
+  // gl.uniform4fv(
+  //   this.ShadowProgram.uniforms.ambientProduct,
+  //   ambientProduct
+  // );
+
+  // gl.uniform4fv(
+  //   this.ShadowProgram.uniforms.diffuseProduct,
+  //   diffuseProduct
+  // );
+
+  // gl.uniform4fv(
+  //   this.ShadowProgram.uniforms.specularProduct,
+  //   specularProduct
+  // );
+
+  // gl.uniform1f(
+  //   this.ShadowProgram.uniforms.shininess,
+  //   gl.FALSE,
+  //   materialShininess
+  // );
+
+
   
   gl.uniform3fv(
     this.ShadowProgram.uniforms.pointLightPosition,

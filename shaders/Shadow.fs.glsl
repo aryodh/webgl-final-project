@@ -11,6 +11,8 @@ uniform float bias;
 varying vec3 fPos;
 varying vec3 fNorm;
 
+//varying vec4 fColor;
+
 void main()
 {
 	vec3 toLightNormal = normalize(pointLightPosition - fPos);
@@ -28,4 +30,5 @@ void main()
 	}
 
 	gl_FragColor = vec4(meshColor.rgb * lightIntensity, meshColor.a);
+	//gl_FragColor = fColor;
 }
