@@ -7,120 +7,172 @@
       }
     </style>
     <title>Shadow Mapping Tutorial</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
   </head>
   <body onload="Init();">
-    <canvas id="gl-surface">
+    <canvas id="gl-surface" style="width: 100vw; height: 100vh;">
       Get a <a href="http://chrome.google.com">less stupid</a> browser
     </canvas>
-    <div style="display: flex;">
-      <img id="walle-texture" src="wall.png" width="0" height="0"></img>
-      <div style="width: 40%; margin-top: 10px;">
-        Wireframe mode <br />
-        <label class="switch">
-          <input type="checkbox" id="wireframe" />
-          <span class="slider round"></span>
-        </label>
-
-        <br />
-        <br />
-        <label for="objectSelector">Choose an object:</label>
-        <select id="objectSelector">
-          <option value="walle">Wall-E</option>
-          <option value="eve">Eve</option>
-          <option value="boxi">Boxi</option>
-        </select>
-        <br />
-        <br />
-        <div>
-          Turn Demo Off<br />
-          <label class="switch">
-            <input type="checkbox" id="demo" />
-            <span class="slider round"></span>
-          </label>
+    <img id="walle-texture" src="wall.png" width="0" height="0"></img>
+    <div style="display: flex; width: 35%; position: absolute; bottom: 10px; right: 10px; z-index: 9; height: 55vh; border-radius: 25px;">
+      <div class="row p-4" style="background-color: #34495e; color: white;" id="panel">
+        <div class="col-12">
+          <div class="row">
+            <div class="col-3">
+              Wireframe mode <br />
+              <label class="switch">
+                <input type="checkbox" id="wireframe" />
+                <span class="slider round"></span>
+              </label>
+            </div>
+            <div class="col-3">
+              Turn Demo Off<br />
+              <label class="switch">
+                <input type="checkbox" id="demo" />
+                <span class="slider round"></span>
+              </label>
+            </div>
+            <div class="col-6">
+              <b style="font-size: 18px;">Movement Keys</b>
+              <br>
+              <b>Camera: </b>
+              <br>
+              w-a-s-d (x z axis) 
+              <br>
+              🠐 🠒 🠑 🠓 (y axis and rotate)
+              <br>
+              <b>Object:</b> 
+              <br>
+              i-j-k-l (x z axis) 
+            </div>
+            <div class="col-12">
+              <label for="objectSelector" style="margin-top: 1em;">Choose an object:</label>
+              <select id="objectSelector">
+                <option value="walle">Wall-E</option>
+                <option value="eve">Eve</option>
+                <option value="boxi">Boxi</option>
+              </select>
+            </div>
+          </div>
         </div>
-        <div>
-          <p>Boxi Torso</p>
-          <input type="range" min="1" max="360" value="1" id="boxiTorso" />
+        <div class="col-6">
+          <div>
+            
+          </div>
+          <div style="margin-top: 1em;">
+            <p style="margin: 0;">Boxi Torso</p>
+            <input type="range" min="1" max="360" value="1" id="boxiTorso" />
+          </div>
+          <hr style="margin: 0; width: 50%;">
+          <div>
+            <p style="margin: 0;">Boxi Right Hand</p>
+            <input type="range" min="1" max="360" value="1" id="BoxiRightHand" />
+          </div>
+          <hr style="margin: 0; width: 50%;">
+          <div>
+            <p style="margin: 0;">Boxi Left Hand</p>
+            <input type="range" min="1" max="360" value="1" id="BoxiLeftHand" />
+          <hr style="margin: 0; width: 50%;">
+          </div>
+          <hr style="margin: 0; width: 50%;">
+          <div>
+            <p style="margin: 0;">Pocong Torso</p>
+            <input type="range" min="1" max="360" value="1" id="pocongTorso" />
+          </div>
+          <hr style="margin: 0; width: 50%;">
+          <div>
+            <p style="margin: 0;">Pocong Right Hand</p>
+            <input
+              type="range"
+              min="1"
+              max="360"
+              value="1"
+              id="pocongRightHand"
+            />
+          </div>
+          <hr style="margin: 0; width: 50%;">
+          <div>
+            <p style="margin: 0;">Pocong Left Hand</p>
+            <input type="range" min="1" max="360" value="1" id="pocongLeftHand" />
+          </div>
         </div>
-        <div>
-          <p>Boxi Right Hand</p>
-          <input type="range" min="1" max="360" value="1" id="BoxiRightHand" />
-        </div>
-        <div>
-          <p>Boxi Left Hand</p>
-          <input type="range" min="1" max="360" value="1" id="BoxiLeftHand" />
-        </div>
-        <div>
-          <p>Pocong Torso</p>
-          <input type="range" min="1" max="360" value="1" id="pocongTorso" />
-        </div>
-        <div>
-          <p>Pocong Right Hand</p>
-          <input
-            type="range"
-            min="1"
-            max="360"
-            value="1"
-            id="pocongRightHand"
-          />
-        </div>
-        <div>
-          <p>Pocong Left Hand</p>
-          <input type="range" min="1" max="360" value="1" id="pocongLeftHand" />
+        <div class="col-6">
+          <div style="margin-top: 1em;">
+            <p style="margin: 0;">walle Torso</p>
+            <input type="range" min="1" max="360" value="1" id="walleTorso" />
+          </div>
+          <hr style="margin: 0; width: 50%;">
+          <div>
+            <p style="margin: 0;">walle Right Upper Arm</p>
+            <input
+              type="range"
+              min="1"
+              max="360"
+              value="1"
+              id="walleRightUpperArm"
+            />
+          </div>
+          <hr style="margin: 0; width: 50%;">
+          <div>
+            <p style="margin: 0;">walle Left Upper Arm</p>
+            <input
+              type="range"
+              min="1"
+              max="360"
+              value="1"
+              id="walleLeftUpperArm"
+            />
+          </div>
+          <hr style="margin: 0; width: 50%;">
+          <div>
+            <p style="margin: 0;">walle Right Lower Arm</p>
+            <input
+              type="range"
+              min="1"
+              max="360"
+              value="1"
+              id="walleRightLowerArm"
+            />
+          </div>
+          <hr style="margin: 0; width: 50%;">
+          <div>
+            <p style="margin: 0;">walle Left Lower Arm</p>
+            <input
+              type="range"
+              min="1"
+              max="360"
+              value="1"
+              id="walleLeftLowerArm"
+            />
+          </div>
+          <hr style="margin: 0; width: 50%;">
+          <div>
+            <p style="margin: 0;">walle Head</p>
+            <input type="range" min="1" max="360" value="1" id="walleHead" />
+          </div>
         </div>
       </div>
-
-      <div style="width: 40%;">
-        <div>
-          <p>walle Torso</p>
-          <input type="range" min="1" max="360" value="1" id="walleTorso" />
-        </div>
-        <div>
-          <p>walle Right Upper Arm</p>
-          <input
-            type="range"
-            min="1"
-            max="360"
-            value="1"
-            id="walleRightUpperArm"
-          />
-        </div>
-        <div>
-          <p>walle Left Upper Arm</p>
-          <input
-            type="range"
-            min="1"
-            max="360"
-            value="1"
-            id="walleLeftUpperArm"
-          />
-        </div>
-        <div>
-          <p>walle Right Lower Arm</p>
-          <input
-            type="range"
-            min="1"
-            max="360"
-            value="1"
-            id="walleRightLowerArm"
-          />
-        </div>
-        <div>
-          <p>walle Left Lower Arm</p>
-          <input
-            type="range"
-            min="1"
-            max="360"
-            value="1"
-            id="walleLeftLowerArm"
-          />
-        </div>
-        <div>
-          <p>walle Head</p>
-          <input type="range" min="1" max="360" value="1" id="walleHead" />
-        </div>
+      <div style="position: absolute; right: 0; height: 100%;">
+        <button style="height: 100%; background-color: #ecf0f1; color: #2c3e50; border: none; width: 3em;" onclick="toggle()" id="toggleButton">
+          >> 
+        </button>
       </div>
     </div>
+    <script>
+      var status = "show";
+      
+      function toggle() {
+        if (status == "show") {
+          status = "hide";
+          document.getElementById('panel').style.display = "none";
+          document.getElementById('toggleButton').innerHTML = "<<";
+        } else {
+          status = "show";
+          document.getElementById('panel').style.display = "flex";
+          document.getElementById('toggleButton').innerHTML = ">>";
+        }
+      }
+    </script>
 
     <script src="bower_components/async/dist/async.min.js"></script>
     <script src="bower_components/gl-matrix/dist/gl-matrix-min.js"></script>
@@ -131,6 +183,9 @@
     <script src="LightMapDemoScene.js"></script>
   </body>
   <style>
+    body {
+      overflow: hidden;
+    }
     /* The switch - the box around the slider */
     .switch {
       position: relative;

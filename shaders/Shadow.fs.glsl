@@ -17,6 +17,8 @@ varying vec2 fragTexCoord;
 varying vec3 fPos;
 varying vec3 fNorm;
 
+//varying vec4 fColor;
+
 void main()
 {
 	vec3 toLightNormal = normalize(pointLightPosition - fPos);

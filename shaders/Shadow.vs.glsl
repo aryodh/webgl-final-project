@@ -1,4 +1,4 @@
-precision mediump float;
+
 
 uniform mat4 mProj;
 uniform mat4 mView;
@@ -11,6 +11,11 @@ attribute vec2 vertTexCoord;
 varying vec2 fragTexCoord;
 varying vec3 fPos;
 varying vec3 fNorm;
+
+//varying vec4 fColor;
+
+uniform vec4 ambientProduct, diffuseProduct, specularProduct;
+uniform float shininess;
 
 void main()
 {
